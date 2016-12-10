@@ -1,0 +1,10 @@
+build*/*
+*.o
+*/*.o
+*/Makefile
+*/*.a
+*.user
+*/*.user
+*/moc*.cpp
+.DS_Store
+*/.DS_Store

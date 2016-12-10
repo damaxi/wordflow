@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>images/drawer.png</file>
+        <file>images/drawer@2x.png</file>
+        <file>images/drawer@3x.png</file>
+        <file>images/drawer@4x.png</file>
+        <file>screens/AddNewScreen.qml</file>
+        <file>screens/LearningScreen.qml</file>
+    </qresource>
+</RCC>
