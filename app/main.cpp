@@ -1,9 +1,12 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QSettings>
+#include <QtQml>
 #include <QQuickStyle>
 #include <QDebug>
 #include <QStandardPaths>
+#include "database.h"
+#include "testing.h"
 
 int main(int argc, char *argv[])
 {
@@ -21,6 +24,9 @@ int main(int argc, char *argv[])
 //        QQuickStyle::setStyle(settings.value("style").toString());
 
     QQmlApplicationEngine engine;
+    Database database;
+    Testing testing;
+    engine.rootContext()->setContextProperty("database", &testing);
     engine.setOfflineStoragePath(
                 QStandardPaths::standardLocations(QStandardPaths::AppDataLocation)[0]);
     qDebug() << engine.offlineStoragePath();
