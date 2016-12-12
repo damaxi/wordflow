@@ -4,42 +4,11 @@ import QtQuick.Layouts 1.1
 import QtQuick.Controls.Material 2.0
 import QtQuick.Controls.Styles 1.4
 import Qt.labs.settings 1.0
-import QtQuick.LocalStorage 2.0
 
 ApplicationWindow {
     id: window
-    property var db: (function() { return LocalStorage.openDatabaseSync("wordflow", "1.0", "vocabulary list", 1000000); })
 
-    function createDatabaseSchemaIfNotExist() {
-        var database = db();
-        var shouldInitDatabase = false;
-        const NumberOfInitialTables = 2;
-        database.transaction(
-            function(tx) {
-                var rs = tx.executeSql("SELECT name FROM sqlite_master WHERE type='table'");
-                if (rs.rows.length < NumberOfInitialTables) shouldInitDatabase = true;
-//                console.log(rs.rows.length);
-//                for(var i = 0; i < rs.rows.length; i++) {
-//                    console.log(rs.rows.item(i).name);
-//                }
-            }
-        )
-        if (shouldInitDatabase) {
-            database.transaction(
-                function(tx) {
-                    tx.executeSql('PRAGMA foreign_keys = ON');
-                    tx.executeSql('CREATE TABLE vocabularies (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                            vocabulary_name TEXT UNIQUE, vocabulary_description TEXT UNIQUE)');
-                    tx.executeSql('CREATE TABLE words (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                            vocabulary INTEGER NOT NULL,
-                            origin TEXT UNIQUE, translated TEXT UNIQUE,
-                            FOREIGN KEY(vocabulary) REFERENCES vocabularies(id))');
-                }
-            )
-        }
-    }
-
-    Component.onCompleted: createDatabaseSchemaIfNotExist()
+    Component.onCompleted: vocabularyImpl.initializeVocabulary()
 
     visible: true
     Material.theme: Material.Dark

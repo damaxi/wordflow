@@ -10,9 +10,9 @@ class DatabaseTest : public QObject
     Q_OBJECT
 public:
 private slots:
-   // void initTestCase();
-//    void add_new_database();
-   // void cleanupTestCase();
+    void init();
+    void createNewVocabulary();
+    void cleanup();
     void createDatabaseWithInitialConfiguration();
 private:
     Database m_database;

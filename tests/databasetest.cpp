@@ -1,31 +1,31 @@
 #include "databasetest.h"
 
 #include <QList>
+#include <QDebug>
 
-//void DatabaseTest::initTestCase()
-//{
-//    m_database.clean_tables();
-//}
+void DatabaseTest::init()
+{
+    m_database.createDatabase();
+}
 
-//void DatabaseTest::add_new_database()
-//{
-//    QString name = "English Vocabulary";
-//    QString description = "B2 Mode";
-//    m_database.create_vocabulary(name, description);
-//    QVariantList vocabulary_list = m_database.list_vocabularies();
-//    QVariantMap map = vocabulary_list.at(0).value<QVariantMap>();
-//    QCOMPARE(map["name"].value<QString>(), name);
-//    QCOMPARE(map["description"].value<QString>(), description);
-//}
+void DatabaseTest::cleanup()
+{
+    m_database.cleanTables();
+}
 
-//void DatabaseTest::cleanupTestCase()
-//{
-//    m_database.remove_database();
-//}
+void DatabaseTest::createNewVocabulary()
+{
+    QString name = "English Vocabulary";
+    QString description = "B2 Mode";
+    m_database.createVocabulary(name, description);
+    QVariantList vocabulary_list = m_database.listVocabularies();
+    QVariantMap map = vocabulary_list.at(0).value<QVariantMap>();
+    QCOMPARE(map["name"].value<QString>(), name);
+    QCOMPARE(map["description"].value<QString>(), description);
+}
 
 void DatabaseTest::createDatabaseWithInitialConfiguration()
 {
-    m_database.createDatabase();
     QVERIFY2(QFile(m_database.path()).exists(), "Database not created.");
     QSqlQuery query;
     query.exec("SELECT name FROM sqlite_master WHERE type='table'");
@@ -37,4 +37,6 @@ void DatabaseTest::createDatabaseWithInitialConfiguration()
     QVERIFY2(tables.contains("words"), "Database not contain words table");
     m_database.removeDatabase();
     QVERIFY2(!QFile(m_database.path()).exists(), "Database not destroyed.");
+    m_database.openDatabase();
+    m_database.createDatabase();
 }

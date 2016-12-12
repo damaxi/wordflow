@@ -8,17 +8,17 @@
 #include <QObject>
 #include <QVariantList>
 
-class Database : public QObject
+class Database
 {
-    Q_OBJECT
 public:
     Database();
     ~Database();
     void openDatabase();
     void createDatabase();
     void createVocabulary(QString, QString);
-    QVariantList listVocabularies() const;
-    void clean_tables() const;
+    void createWord(QString, QString, int);
+    QVariantList listVocabularies();
+    void cleanTables();
     void removeDatabase();
     QString path() const;
 private:
