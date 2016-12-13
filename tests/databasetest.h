@@ -12,6 +12,9 @@ public:
 private slots:
     void init();
     void createNewVocabulary();
+    void createNewWorld();
+    void updateProgress();
+    void listWordsForMultipleDistinctWords();
     void cleanup();
     void createDatabaseWithInitialConfiguration();
 private:

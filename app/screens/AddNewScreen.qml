@@ -7,16 +7,6 @@ import QtQuick.Controls.Styles 1.4
 Pane {
     ColumnLayout {
         id: addWordScreen
-        function addWord(origin, translated) {
-            var database = window.db();
-            database.transaction(
-                function(tx) {
-                    var inserted_id = tx.executeSql('INSERT INTO words (vocabulary, origin, translated) VALUES(?, ?, ?)',
-                                  [0, origin, translated]);
-                    // console.log(inserted_id.insertId);
-                }
-            )
-        }
 
         spacing: 2
         anchors.fill: parent
@@ -56,11 +46,10 @@ Pane {
             focus: true
             Keys.onEnterPressed: console.log("hej")
             onClicked: {
-                try {
-                    addWordScreen.addWord(origin.text, translated.text)
+                var result = vocabularyImpl.createWord(origin.text, translated.text)
+                if (result) {
                     popup.state = "success"
-                } catch (e) {
-                    console.log(e);
+                } else {
                     popup.state = "alert"
                 }
             }

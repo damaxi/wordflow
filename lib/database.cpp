@@ -6,12 +6,14 @@
 #include <QDebug>
 #include <QStandardPaths>
 #include <QCoreApplication>
+#include "sqlerror.h"
 
-Database::Database()
+Database::Database(QObject *parent)
     :
+      QObject(parent),
       m_path(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation)[0]),
       m_database(QSqlDatabase::addDatabase("QSQLITE")),
-       m_query(),
+      m_query(),
       m_database_name("/wordflow.sql")
 {
     openDatabase();
@@ -42,33 +44,74 @@ void Database::createDatabase()
                        "vocabulary_name TEXT UNIQUE NOT NULL, "
                        "vocabulary_description TEXT UNIQUE NOT NULL)");
     m_query.exec("CREATE TABLE words (id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                 "vocabulary INTEGER NOT NULL, origin TEXT UNIQUE NOT NULL, "
-                 "translated TEXT UNIQUE NOT NULL, progress INTEGER DEFAULT 0, "
+                 "vocabulary INTEGER NOT NULL, origin TEXT NOT NULL, "
+                 "translated TEXT NOT NULL, progress INTEGER DEFAULT 0, "
                  "FOREIGN KEY(vocabulary) REFERENCES vocabularies(id))");
 }
 
-void Database::createVocabulary(QString vocabulary, QString description)
+bool Database::createVocabulary(QString vocabulary, QString description)
 {
         m_query.prepare("INSERT INTO vocabularies (vocabulary_name, vocabulary_description) "
                    "VALUES (:vocabulary, :description)");
         m_query.bindValue(":vocabulary", vocabulary);
         m_query.bindValue(":description", description);
-        m_query.exec();
+        return m_query.exec();
 }
 
-void Database::createWord(QString origin, QString translated, int vocabulary_id)
+bool Database::createWord(QString origin, QString translated, int vocabulary_id)
 {
     m_query.prepare("INSERT INTO words (vocabulary, origin, translated) "
                "VALUES (:vocabulary, :origin, :translated)");
     m_query.bindValue(":vocabulary", vocabulary_id);
     m_query.bindValue(":origin", origin);
     m_query.bindValue(":translated", translated);
+    return m_query.exec();
+}
+
+bool Database::updateProgress(QString origin, int vocabulary_id, int progress)
+{
+    m_query.prepare("UPDATE words SET progress = :progress "
+                    "WHERE origin = :origin AND vocabulary = :vocabulary_id");
+    m_query.bindValue(":progress", progress);
+    m_query.bindValue(":origin", origin);
+    m_query.bindValue(":vocabulary_id", vocabulary_id);
+    return m_query.exec();
+}
+
+QVariantList Database::listWords(int vocabulary, int limit, bool sort)
+{
+    QString query = "SELECT origin, translated, progress FROM words WHERE vocabulary = :vocabulary ";
+    if (sort)
+        query += "ORDER BY progress ASC ";
+    if (limit != std::numeric_limits<int>::max())
+        query += "LIMIT :limit";
+
+    m_query.prepare(query);
+    m_query.bindValue(":vocabulary", vocabulary);
+    if (limit != std::numeric_limits<int>::max())
+        m_query.bindValue(":limit", limit);
     m_query.exec();
+    QVariantList word_list;
+    while (m_query.next()) {
+        QString origin = m_query.value(0).toString();
+        QString translated = m_query.value(1).toString();
+        int progress = m_query.value(2).toInt();
+        QVariantList word = { origin, translated, progress };
+        word_list << QVariant::fromValue(word);
+    }
+
+    return word_list;
 }
 
 QString Database::path() const
 {
     return m_path + m_database_name;
+}
+
+void Database::runSql()
+{
+    if(!m_query.exec())
+        throw SqlError(m_query.lastError().text().toStdString());
 }
 
 void Database::cleanTables()

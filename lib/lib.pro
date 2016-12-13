@@ -11,9 +11,11 @@ TARGET = lib
 TEMPLATE = lib
 CONFIG += staticlib c++11
 
-SOURCES += database.cpp
+SOURCES += database.cpp \
+    sqlerror.cpp
 
-HEADERS += database.h
+HEADERS += database.h \
+    sqlerror.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

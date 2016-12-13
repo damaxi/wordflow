@@ -5,7 +5,7 @@
 #include <QQuickStyle>
 #include <QDebug>
 #include <QStandardPaths>
-#include "vocabulary.h"
+#include "database.h"
 
 int main(int argc, char *argv[])
 {
@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 //        QQuickStyle::setStyle(settings.value("style").toString());
 
     QQmlApplicationEngine engine;
-    Vocabulary vocabulary;
+    Database vocabulary;
     engine.rootContext()->setContextProperty("vocabularyImpl", &vocabulary);
     engine.setOfflineStoragePath(
                 QStandardPaths::standardLocations(QStandardPaths::AppDataLocation)[0]);

@@ -8,7 +8,7 @@ import Qt.labs.settings 1.0
 ApplicationWindow {
     id: window
 
-    Component.onCompleted: vocabularyImpl.initializeVocabulary()
+    Component.onCompleted: vocabularyImpl.createDatabase()
 
     visible: true
     Material.theme: Material.Dark
