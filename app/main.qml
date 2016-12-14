@@ -144,13 +144,49 @@ ApplicationWindow {
         width: window.width; height: window.height
         SwipeView {
             id: introView
-            currentIndex: 1
+            currentIndex: 0
             anchors.fill: parent
-
+            anchors.bottomMargin: 50
             Item {
                 id: aboutPage
+                ColumnLayout {
+                    anchors.fill: parent
+                    Label {
+                        id: welcomeLabel
+                        text: qsTr("Welcome to wordflow!")
+                        font.pixelSize: 25
+                        font.bold: true
+                        Layout.alignment: Qt.AlignCenter
+
+                    }
+                }
+            }
+
+            Item {
+                ColumnLayout {
+                    anchors.fill: parent
+                    Label {
+                        font.pixelSize: 20
+                        text: qsTr("Vocabulary: ")
+                    }
+
+                    TextArea {
+                        id: origin
+                        Layout.fillWidth: true
+                        wrapMode: TextEdit.Wrap
+                    }
+                }
             }
         }
+        PageIndicator {
+              id: indicator
+
+              count: introView.count
+              currentIndex: introView.currentIndex
+
+              anchors.bottom: introView.bottom
+              anchors.horizontalCenter: parent.horizontalCenter
+          }
     }
 
 //    Drawer {
