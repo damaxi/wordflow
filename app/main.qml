@@ -8,7 +8,12 @@ import Qt.labs.settings 1.0
 ApplicationWindow {
     id: window
 
-    Component.onCompleted: vocabularyImpl.createDatabase()
+    Component.onCompleted: {
+        vocabularyImpl.createDatabase()
+        if (!vocabularyImpl.checkIfVocabularyExist()) {
+            configurationPopup.open()
+        }
+    }
 
     visible: true
     Material.theme: Material.Dark
@@ -129,6 +134,21 @@ ApplicationWindow {
                     horizontalAlignment: Label.AlignHCenter
                     verticalAlignment: Label.AlignVCenter
                 }
+            }
+        }
+    }
+
+    Popup {
+        id: configurationPopup
+        closePolicy: Popup.NoAutoClose
+        width: window.width; height: window.height
+        SwipeView {
+            id: introView
+            currentIndex: 1
+            anchors.fill: parent
+
+            Item {
+                id: aboutPage
             }
         }
     }
