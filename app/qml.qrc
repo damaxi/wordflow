@@ -8,5 +8,6 @@
         <file>images/drawer@4x.png</file>
         <file>screens/AddNewScreen.qml</file>
         <file>screens/LearningScreen.qml</file>
+        <file>controls/ConfigurationPopup.qml</file>
     </qresource>
 </RCC>
