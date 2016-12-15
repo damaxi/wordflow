@@ -126,7 +126,9 @@ Popup {
         count: introView.count
         currentIndex: introView.currentIndex
 
-        anchors.bottom: introView.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors {
+            bottom: introView.bottom
+            horizontalCenter: parent.horizontalCenter
+        }
     }
 }

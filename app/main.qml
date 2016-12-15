@@ -30,9 +30,6 @@ ApplicationWindow {
 
     header: ToolBar {
         id: toolBar
-        RowLayout {
-            spacing: 20
-            anchors.fill: parent
 
             ToolButton {
                 id: menu
@@ -51,17 +48,21 @@ ApplicationWindow {
                 id: titleLabel
                 text: "WordFlow"
                 font.pixelSize: 20
-                //style: Text.Sunken
-                //styleColor: "gray"
-                //antialiasing: true
-                //elide: Label.ElideRight
                 anchors.centerIn: parent
-                //horizontalAlignment: Qt.AlignHCenter
-                //verticalAlignment: Qt.AlignVCenter
-                //Layout.fillWidth: true
-                Layout.alignment: Qt.AlignHCenter
             }
-        }
+
+            ComboBox {
+                width: 200
+                height: toolBar.height
+                model: ["English Vocabulary", "Second", "Third"]
+                anchors.right: parent.right
+                background: Rectangle {
+                     color: "white"
+                }
+                //TODO combobox should be invisible while configuration as menu
+                Material.foreground: Material.Green
+                Material.accent: Material.Green
+            }
     }
 
     Pane {
