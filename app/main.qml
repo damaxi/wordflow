@@ -23,46 +23,61 @@ ApplicationWindow {
     height: 520
     title: qsTr("WordFlow")
 
-//    Settings {
-//        id: settings
-//        property string style: "Material"
-//    }
 
+    //    Settings {
+    //        id: settings
+    //        property string style: "Material"
+    //    }
     header: ToolBar {
         id: toolBar
-
-            ToolButton {
-                id: menu
-                contentItem: Image {
-                    fillMode: Image.Pad
-                    source: "qrc:/images/drawer.png"
-                    horizontalAlignment: Image.AlignHCenter
-                    verticalAlignment: Image.AlignVCenter
+        states: [
+            State {
+                name: "beforeConfiguration"
+                PropertyChanges {
+                    target: menu
+                    visible: false
                 }
-                onClicked: {
-                    actionPane.visible = !actionPane.visible
+                PropertyChanges {
+                    target: vocabularyBox
+                    visible: false
                 }
             }
 
-            Label {
-                id: titleLabel
-                text: "WordFlow"
-                font.pixelSize: 20
-                anchors.centerIn: parent
-            }
+        ]
 
-            ComboBox {
-                width: 200
-                height: toolBar.height
-                model: ["English Vocabulary", "Second", "Third"]
-                anchors.right: parent.right
-                background: Rectangle {
-                     color: "white"
-                }
-                //TODO combobox should be invisible while configuration as menu
-                Material.foreground: Material.Green
-                Material.accent: Material.Green
+        ToolButton {
+            id: menu
+            visible: true
+            contentItem: Image {
+                fillMode: Image.Pad
+                source: "qrc:/images/drawer.png"
+                horizontalAlignment: Image.AlignHCenter
+                verticalAlignment: Image.AlignVCenter
             }
+            onClicked: {
+                actionPane.visible = !actionPane.visible
+            }
+        }
+
+        Label {
+            id: titleLabel
+            text: "WordFlow"
+            font.pixelSize: 20
+            anchors.centerIn: parent
+        }
+
+        ComboBox {
+            id: vocabularyBox
+            width: 200
+            height: toolBar.height
+            model: ["English Vocabulary", "Second", "Third"]
+            anchors.right: parent.right
+            background: Rectangle {
+                color: "white"
+            }
+            Material.foreground: Material.Green
+            Material.accent: Material.Green
+        }
     }
 
     Pane {
@@ -75,9 +90,9 @@ ApplicationWindow {
             spacing: 10
             Material.background: Material.Orange
             anchors.fill: parent
+
             // Material.foreground: Material.Black
             // Material.elevation: 0
-
             Button {
                 id: learning
                 text: qsTr("Start learning")
@@ -107,7 +122,8 @@ ApplicationWindow {
         //Material.background: Material.Lime
         states: [
             State {
-                name: "wider"; when: !actionPane.visible
+                name: "wider"
+                when: !actionPane.visible
                 PropertyChanges {
                     target: vocabulary
                     width: window.width
@@ -115,7 +131,8 @@ ApplicationWindow {
                 }
             },
             State {
-                name: "narrower"; when: actionPane.visible
+                name: "narrower"
+                when: actionPane.visible
                 PropertyChanges {
                     target: vocabulary
                     width: window.width - actionPane.width
@@ -141,13 +158,19 @@ ApplicationWindow {
     }
     Controls.ConfigurationPopup {
         id: configurationPopup
+        onClosed: {
+            toolBar.state = ""
+        }
+        onOpened: {
+            toolBar.state = "beforeConfiguration"
+        }
     }
 
-//    Drawer {
-//        id: drawer
-//        width: Math.min(window.width, window.height) / 3
-//        height: window.height
-//        visible: true
+    //    Drawer {
+    //        id: drawer
+    //        width: Math.min(window.width, window.height) / 3
+    //        height: window.height
+    //        visible: true
 
-//    }
+    //    }
 }
