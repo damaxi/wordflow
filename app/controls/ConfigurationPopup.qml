@@ -67,6 +67,7 @@ Popup {
                     TextField {
                         id: vocabularyInput
                         maximumLength: 25
+                        validator: RegExpValidator { regExp: /^[A-Z].*/ }
                         Layout.fillWidth: true
                         KeyNavigation.tab: descriptionInput
                     }

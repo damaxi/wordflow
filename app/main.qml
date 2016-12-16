@@ -8,12 +8,20 @@ import "controls" as Controls
 
 ApplicationWindow {
     id: window
+    property var vocabularyList: []
 
     Component.onCompleted: {
         vocabularyImpl.createDatabase()
         if (!vocabularyImpl.checkIfVocabularyExist()) {
             configurationPopup.open()
+        } else {
+            window.vocabularyList = vocabularyImpl.listVocabularies()
+            vocabularyBox.currentIndex = settings.defaultVocabularyId
         }
+    }
+
+    Component.onDestruction: {
+        settings.defaultVocabularyId = vocabularyBox.currentIndex
     }
 
     visible: true
@@ -24,10 +32,11 @@ ApplicationWindow {
     title: qsTr("WordFlow")
 
 
-    //    Settings {
-    //        id: settings
-    //        property string style: "Material"
-    //    }
+    Settings {
+        id: settings
+        property int defaultVocabularyId: 0
+    }
+
     header: ToolBar {
         id: toolBar
         states: [
@@ -42,7 +51,6 @@ ApplicationWindow {
                     visible: false
                 }
             }
-
         ]
 
         ToolButton {
@@ -70,11 +78,17 @@ ApplicationWindow {
             id: vocabularyBox
             width: 200
             height: toolBar.height
-            model: ["English Vocabulary", "Second", "Third"]
+            model: window.vocabularyList
+            textRole: "name"
             anchors.right: parent.right
             background: Rectangle {
                 color: "white"
             }
+            onCurrentIndexChanged: {
+                console.log("current index: " + settings.defaultVocabularyId)
+                //TODO connect index changing with auto vocabulary learning change
+            }
+
             Material.foreground: Material.Green
             Material.accent: Material.Green
         }
@@ -119,7 +133,6 @@ ApplicationWindow {
         width: window.width - actionPane.width
         height: window.height - toolBar.height
         anchors.left: actionPane.right
-        //Material.background: Material.Lime
         states: [
             State {
                 name: "wider"
@@ -159,6 +172,7 @@ ApplicationWindow {
     Controls.ConfigurationPopup {
         id: configurationPopup
         onClosed: {
+            window.vocabularyList = vocabularyImpl.listVocabularies()
             toolBar.state = ""
         }
         onOpened: {
