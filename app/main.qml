@@ -5,19 +5,24 @@ import QtQuick.Layouts 1.1
 import QtQuick.Controls.Material 2.0
 import QtQuick.Controls.Styles 1.4
 import Qt.labs.settings 1.0
+import "screens" as Screens
 import "controls" as Controls
 
 ApplicationWindow {
     id: window
+    flags: Qt.Window
     property var vocabularyList: []
 
     Component.onCompleted: {
         vocabularyImpl.createDatabase()
-        if (!vocabularyImpl.checkIfVocabularyExist()) {
-            configurationPopup.open()
-        } else {
+        if (vocabularyImpl.checkIfVocabularyExist())  {
             window.vocabularyList = vocabularyImpl.listVocabularies()
             vocabularyBox.currentIndex = settings.defaultVocabularyId
+            toolBar.state = ""
+        }
+        splashScreen.state = "StopSplash"
+        if (!vocabularyImpl.checkIfVocabularyExist()) {
+            configurationPopup.open()
         }
     }
 
@@ -40,6 +45,7 @@ ApplicationWindow {
 
     header: ToolBar {
         id: toolBar
+        state: "beforeConfiguration"
         states: [
             State {
                 name: "beforeConfiguration"
@@ -170,6 +176,7 @@ ApplicationWindow {
             }
         }
     }
+
     Controls.ConfigurationPopup {
         id: configurationPopup
         onClosed: {
@@ -179,6 +186,10 @@ ApplicationWindow {
         onOpened: {
             toolBar.state = "beforeConfiguration"
         }
+    }
+
+    Screens.SplashScreen {
+        id: splashScreen
     }
 
     //    Drawer {

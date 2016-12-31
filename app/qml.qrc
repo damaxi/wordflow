@@ -9,5 +9,6 @@
         <file>screens/AddNewScreen.qml</file>
         <file>screens/LearningScreen.qml</file>
         <file>controls/ConfigurationPopup.qml</file>
+        <file>screens/SplashScreen.qml</file>
     </qresource>
 </RCC>
