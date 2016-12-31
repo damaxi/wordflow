@@ -1,4 +1,5 @@
 #include <QGuiApplication>
+#include <QSysInfo>
 #include <QQmlApplicationEngine>
 #include <QSettings>
 #include <QtQml>
@@ -11,7 +12,9 @@ int main(int argc, char *argv[])
 {
     QGuiApplication::setApplicationName("Wordflow");
     QGuiApplication::setOrganizationName("damaxi");
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QString osType = QSysInfo::productType();
+    if (osType == "macos" || osType == "osx")
+        QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
 
 //    QSettings settings;
