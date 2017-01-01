@@ -42,7 +42,7 @@ void Database::createDatabase()
     m_query.exec("CREATE TABLE IF NOT EXISTS vocabularies "
                        "(ID INTEGER PRIMARY KEY AUTOINCREMENT, "
                        "vocabulary_name TEXT UNIQUE NOT NULL, "
-                       "vocabulary_description TEXT UNIQUE NOT NULL)");
+                       "vocabulary_description TEXT NOT NULL)");
     m_query.exec("CREATE TABLE words (id INTEGER PRIMARY KEY AUTOINCREMENT, "
                  "vocabulary INTEGER NOT NULL, origin TEXT NOT NULL, "
                  "translated TEXT NOT NULL, progress INTEGER DEFAULT 0, "

@@ -21,7 +21,7 @@ ApplicationWindow {
         }
         splashScreen.item.state = "StopSplash"
         if (!vocabularyImpl.checkIfVocabularyExist()) {
-            configurationPopup.open()
+            configurationPopup.source = "qrc:/controls/ConfigurationPopup.qml"
         }
     }
 
@@ -146,11 +146,19 @@ ApplicationWindow {
         }
     }
 
-    Controls.ConfigurationPopup {
+    Loader {
         id: configurationPopup
+        onLoaded: {
+            item.open()
+        }
+    }
+
+    Connections {
+        target: configurationPopup.item
         onClosed: {
             window.vocabularyList = vocabularyImpl.listVocabularies()
             toolBar.state = ""
+            configurationPopup.source = ""
         }
         onOpened: {
             toolBar.state = "beforeConfiguration"

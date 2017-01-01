@@ -11,5 +11,6 @@
         <file>controls/ConfigurationPopup.qml</file>
         <file>screens/SplashScreen.qml</file>
         <file>controls/Menu.qml</file>
+        <file>screens/AddNewVocabularyScreen.qml</file>
     </qresource>
 </RCC>

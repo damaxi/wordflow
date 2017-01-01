@@ -3,6 +3,7 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls.Material 2.0
+import "../screens" as Screen
 
 Popup {
     id: configurationPopup
@@ -10,6 +11,7 @@ Popup {
     width: window.width
     height: window.height
     focus: true
+    padding: 0
 
     SwipeView {
         id: introView
@@ -18,7 +20,7 @@ Popup {
         anchors.bottomMargin: 50
         focus: true
 
-        Item {
+        Pane {
             id: aboutPage
 
             ColumnLayout {
@@ -42,80 +44,22 @@ Popup {
             }
         }
 
-        Item {
-            focus: true
+        Screen.AddNewVocabularyScreen {
+            id: vocabularyScreen
+        }
 
-            ColumnLayout {
-                anchors.fill: parent
-                anchors.margins: 20
-
-                Label {
-                    font.pixelSize: 25
-                    font.bold: true
-                    text: qsTr("Add vocabulary to start")
-                    horizontalAlignment: Qt.AlignHCenter
-                    Layout.fillWidth: true
-                }
-
-                RowLayout {
-
-                    Label {
-                        font.pixelSize: 20
-                        text: qsTr("Vocabulary: ")
-                    }
-
-                    TextField {
-                        id: vocabularyInput
-                        maximumLength: 25
-                        validator: RegExpValidator { regExp: /^[A-Z].*/ }
-                        Layout.fillWidth: true
-                        KeyNavigation.tab: descriptionInput
-                    }
-                }
-
-                RowLayout {
-
-                    Label {
-                        font.pixelSize: 20
-                        text: qsTr("Description: ")
-                    }
-
-                    TextField {
-                        id: descriptionInput
-                        maximumLength: 25
-                        Layout.fillWidth: true
-                        KeyNavigation.tab: confirmNewVocabularyButton
-                    }
-                }
-
-                Label {
-                    id: popup
-                    font.pixelSize: 20
-                    font.bold: true
-                    visible: false
-                    horizontalAlignment: Label.AlignHCenter
-                    Layout.fillWidth: true
-                    Material.foreground: Material.Red
-                }
-
-                Button {
-                    id: confirmNewVocabularyButton
-                    text: "Add"
-                    Layout.fillWidth: true
-                    Keys.onReturnPressed: clicked()
-                    KeyNavigation.tab: vocabularyInput
-                    onClicked: {
-                        if (vocabularyInput.text.length > 0
-                                && descriptionInput.text.length > 0) {
-                            vocabularyImpl.createVocabulary(
-                                        vocabularyInput.text,
-                                        descriptionInput.text)
-                            configurationPopup.close()
-                        } else {
-                            popup.text = qsTr("One of input is empty!")
-                            popup.visible = true
-                        }
-                    }
+        Connections {
+            target: vocabularyScreen.confirmationButton
+            onClicked: {
+                if (vocabularyScreen.vocabularyInputText.length > 0
+                        && vocabularyScreen.descriptionInputText.length > 0) {
+                    vocabularyImpl.createVocabulary(
+                                vocabularyScreen.vocabularyInputText,
+                                vocabularyScreen.descriptionInputText)
+                    configurationPopup.close()
+                } else {
+                    vocabularyScreen.popup.text = qsTr("One of input is empty!")
+                    vocabularyScreen.popup.visible = true
                 }
             }
         }

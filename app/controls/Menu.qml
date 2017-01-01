@@ -44,7 +44,7 @@ Pane {
             Layout.fillWidth: true
             sourceComponent: menuButton
             onLoaded: {
-                item.text = qsTr("Add new")
+                item.text = qsTr("Add word")
             }
         }
 
@@ -52,6 +52,23 @@ Pane {
             target: addNewWord.item
             onClicked: {
                 stackView.replace("qrc:/screens/AddNewScreen.qml")
+            }
+        }
+
+        Loader {
+            id: addNewVocabulary
+            anchors.top: addNewWord.bottom
+            Layout.fillWidth: true
+            sourceComponent: menuButton
+            onLoaded: {
+                item.text = qsTr("Add vocabulary")
+            }
+        }
+
+        Connections {
+            target: addNewVocabulary.item
+            onClicked: {
+                stackView.replace("qrc:/screens/AddNewVocabularyScreen.qml")
             }
         }
     }
