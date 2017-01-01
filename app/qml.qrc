@@ -10,5 +10,6 @@
         <file>screens/LearningScreen.qml</file>
         <file>controls/ConfigurationPopup.qml</file>
         <file>screens/SplashScreen.qml</file>
+        <file>controls/Menu.qml</file>
     </qresource>
 </RCC>

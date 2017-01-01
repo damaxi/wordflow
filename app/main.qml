@@ -101,38 +101,8 @@ ApplicationWindow {
         }
     }
 
-    Pane {
+    Controls.Menu {
         id: actionPane
-        width: Math.min(window.width, window.height) / 3
-        height: window.height //- toolBar.height
-        Material.background: Material.Teal
-
-        ColumnLayout {
-            spacing: 10
-            Material.background: Material.Orange
-            anchors.fill: parent
-
-            // Material.foreground: Material.Black
-            // Material.elevation: 0
-            Button {
-                id: learning
-                text: qsTr("Start learning")
-                anchors.top: parent.top
-                Layout.fillWidth: true
-                onClicked: {
-                    stackView.replace("qrc:/screens/LearningScreen.qml")
-                }
-            }
-
-            Button {
-                text: qsTr("Add new")
-                anchors.top: learning.bottom
-                Layout.fillWidth: true
-                onClicked: {
-                    stackView.replace("qrc:/screens/AddNewScreen.qml")
-                }
-            }
-        }
     }
 
     Pane {
