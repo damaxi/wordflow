@@ -11,7 +11,7 @@ Pane {
 
     RowLayout {
         anchors.centerIn: parent
-        BusyIndicator{
+        BusyIndicator {
             id: indicator
             running: true
             state: "StartSplash"
@@ -34,15 +34,16 @@ Pane {
           transitions: [
             Transition {
                 from: "StartSplash"; to: "StopSplash"
-                NumberAnimation {
-                    target: splash
-                    properties: "opacity"; to: 0; duration: 2000
-//                    onRunningChanged: {
-//                        if (!running) {
-//                            console.log("Destroying")
-//                            splash.deleteLater()
-//                        }
-//                    }
+                SequentialAnimation {
+                    NumberAnimation {
+                        target: splash
+                        properties: "opacity"; to: 0; duration: 2000
+                    }
+                    PropertyAction {
+                        target: splashScreen
+                        property: "source"
+                        value: ""
+                    }
                 }
             }
           ]

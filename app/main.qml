@@ -5,7 +5,6 @@ import QtQuick.Layouts 1.1
 import QtQuick.Controls.Material 2.0
 import QtQuick.Controls.Styles 1.4
 import Qt.labs.settings 1.0
-import "screens" as Screens
 import "controls" as Controls
 
 ApplicationWindow {
@@ -20,7 +19,7 @@ ApplicationWindow {
             vocabularyBox.currentIndex = settings.defaultVocabularyId
             toolBar.state = ""
         }
-        splashScreen.state = "StopSplash"
+        splashScreen.item.state = "StopSplash"
         if (!vocabularyImpl.checkIfVocabularyExist()) {
             configurationPopup.open()
         }
@@ -158,8 +157,10 @@ ApplicationWindow {
         }
     }
 
-    Screens.SplashScreen {
+    Loader {
         id: splashScreen
+        source: "qrc:/screens/SplashScreen.qml"
+        anchors.fill: parent
     }
 
     //    Drawer {
