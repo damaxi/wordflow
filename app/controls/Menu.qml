@@ -8,6 +8,17 @@ Pane {
     height: window.height //- toolBar.height
     Material.background: Material.Teal
 
+    function showSubMenu(url) {
+        if (stackView.depth > 1)
+            stackView.pop()
+        stackView.push(url)
+    }
+
+    function showMainMenu() {
+        if (stackView.depth > 1)
+            stackView.pop()
+    }
+
     Component {
         id: menuButton
         Button {
@@ -34,7 +45,7 @@ Pane {
         Connections {
             target: learning.item
             onClicked: {
-                stackView.replace("qrc:/screens/LearningScreen.qml")
+                showMainMenu()
             }
         }
 
@@ -51,7 +62,7 @@ Pane {
         Connections {
             target: addNewWord.item
             onClicked: {
-                stackView.replace("qrc:/screens/AddNewScreen.qml")
+                showSubMenu("qrc:/screens/AddNewScreen.qml")
             }
         }
 
@@ -68,7 +79,7 @@ Pane {
         Connections {
             target: addNewVocabulary.item
             onClicked: {
-                stackView.replace("qrc:/screens/AddNewVocabularyScreen.qml")
+                showSubMenu("qrc:/screens/AddNewVocabularyScreen.qml")
             }
         }
     }

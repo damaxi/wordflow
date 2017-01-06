@@ -88,8 +88,8 @@ Pane {
     ColumnLayout {
 
         Component.onCompleted: {
-            learnScreen.loadFirstNWords(5);
-            if (wordArray.length != 0) learnScreen.setNewWord();
+            // learnScreen.loadFirstNWords(5);
+            // if (wordArray.length != 0) learnScreen.setNewWord();
         }
 
         anchors.fill: parent

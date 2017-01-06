@@ -6,6 +6,7 @@ import QtQuick.Controls.Material 2.0
 import QtQuick.Controls.Styles 1.4
 import Qt.labs.settings 1.0
 import "controls" as Controls
+import "screens" as Screens
 
 ApplicationWindow {
     id: window
@@ -91,7 +92,7 @@ ApplicationWindow {
                 color: "white"
             }
             onCurrentIndexChanged: {
-                console.log("current index: " + settings.defaultVocabularyId)
+                //console.log("current index: " + settings.defaultVocabularyId)
                 //TODO connect index changing with auto vocabulary learning change
             }
 
@@ -134,14 +135,14 @@ ApplicationWindow {
             id: stackView
             anchors.fill: parent
 
-            initialItem: Pane {
-                Label {
-                    text: qsTr("Your vocabulary is empty")
-                    font.pixelSize: 20
-                    anchors.centerIn: parent
-                    horizontalAlignment: Label.AlignHCenter
-                    verticalAlignment: Label.AlignVCenter
-                }
+            initialItem: Screens.LearningScreen {}
+            pushEnter: Transition {
+            }
+            popEnter: Transition {
+            }
+            popExit: Transition {
+            }
+            pushExit: Transition {
             }
         }
     }
