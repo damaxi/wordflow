@@ -136,14 +136,10 @@ ApplicationWindow {
             anchors.fill: parent
 
             initialItem: Screens.LearningScreen {}
-            pushEnter: Transition {
-            }
-            popEnter: Transition {
-            }
-            popExit: Transition {
-            }
-            pushExit: Transition {
-            }
+            pushEnter: Controls.StackViewCommonTransition {}
+            popEnter: Controls.StackViewCommonTransition {}
+            popExit: Controls.StackViewCommonTransition {}
+            pushExit: Controls.StackViewCommonTransition {}
         }
     }
 

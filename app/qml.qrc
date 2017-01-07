@@ -12,5 +12,6 @@
         <file>screens/SplashScreen.qml</file>
         <file>controls/Menu.qml</file>
         <file>screens/AddNewVocabularyScreen.qml</file>
+        <file>controls/StackViewCommonTransition.qml</file>
     </qresource>
 </RCC>
