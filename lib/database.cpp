@@ -40,7 +40,7 @@ void Database::openDatabase()
 void Database::createDatabase()
 {
     m_query.exec("CREATE TABLE IF NOT EXISTS vocabularies "
-                       "(ID INTEGER PRIMARY KEY AUTOINCREMENT, "
+                       "(id INTEGER PRIMARY KEY AUTOINCREMENT, "
                        "vocabulary_name TEXT UNIQUE NOT NULL, "
                        "vocabulary_description TEXT NOT NULL)");
     m_query.exec("CREATE TABLE words (id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -80,7 +80,7 @@ bool Database::updateProgress(QString origin, int vocabulary_id, int progress)
 
 QVariantList Database::listWords(int vocabulary, int limit, bool sort)
 {
-    QString query = "SELECT origin, translated, progress FROM words WHERE vocabulary = :vocabulary ";
+    QString query = "SELECT id, origin, translated, progress FROM words WHERE vocabulary = :vocabulary ";
     if (sort)
         query += "ORDER BY progress ASC ";
     if (limit != std::numeric_limits<int>::max())
@@ -93,11 +93,13 @@ QVariantList Database::listWords(int vocabulary, int limit, bool sort)
     m_query.exec();
     QVariantList word_list;
     while (m_query.next()) {
-        QString origin = m_query.value(0).toString();
-        QString translated = m_query.value(1).toString();
-        int progress = m_query.value(2).toInt();
-        QVariantList word = { origin, translated, progress };
-        word_list << QVariant::fromValue(word);
+        int id = m_query.value(0).toInt();
+        QString origin = m_query.value(1).toString();
+        QString translated = m_query.value(2).toString();
+        int progress = m_query.value(3).toInt();
+        QVariantMap map = { {"id", id}, {"origin", origin},
+                            {"translated", translated}, {"progress", progress} };
+        word_list << QVariant::fromValue(map);
     }
 
     return word_list;
@@ -133,11 +135,12 @@ void Database::removeDatabase()
 QVariantList Database::listVocabularies()
 {
     QVariantList vocabulary_list;
-    m_query.exec("SELECT vocabulary_name, vocabulary_description FROM vocabularies");
+    m_query.exec("SELECT id, vocabulary_name, vocabulary_description FROM vocabularies");
     while (m_query.next()) {
-        QString name = m_query.value(0).toString();
-        QString description = m_query.value(1).toString();
-        QVariantMap map = { {"name", name}, {"description", description} };
+        int id = m_query.value(0).toInt();
+        QString name = m_query.value(1).toString();
+        QString description = m_query.value(2).toString();
+        QVariantMap map = { {"id", id}, {"name", name}, {"description", description} };
         vocabulary_list << QVariant::fromValue(map);
     }
 

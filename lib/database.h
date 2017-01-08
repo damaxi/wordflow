@@ -21,7 +21,7 @@ public:
     Q_INVOKABLE bool createVocabulary(QString vocabulary, QString description);
     Q_INVOKABLE bool createWord(QString origin, QString translated, int vocabulary_id = 0);
     Q_INVOKABLE bool updateProgress(QString origin, int vocabulary_id, int progress);
-    QVariantList listWords(int vocabulary, int limit = std::numeric_limits<int>::max(), bool sort = true);
+    Q_INVOKABLE QVariantList listWords(int vocabulary, int limit = std::numeric_limits<int>::max(), bool sort = true);
     Q_INVOKABLE QVariantList listVocabularies();
     void cleanTables();
     void removeDatabase();

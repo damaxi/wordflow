@@ -34,7 +34,7 @@ Pane {
             id: translated
             Layout.fillWidth: true
             wrapMode: TextEdit.Wrap
-            KeyNavigation.tab: origin
+            KeyNavigation.tab: add
             KeyNavigation.priority: KeyNavigation.BeforeItem
         }
 
@@ -44,9 +44,11 @@ Pane {
             Layout.columnSpan: 2
             Layout.fillWidth: true
             focus: true
-            Keys.onEnterPressed: console.log("hej")
+            KeyNavigation.tab: origin
+            Keys.onReturnPressed: clicked()
             onClicked: {
-                var result = vocabularyImpl.createWord(origin.text, translated.text)
+                var current_vocabulary_id = window.vocabularyList[vocabularyBox.currentIndex].id
+                var result = vocabularyImpl.createWord(origin.text, translated.text, current_vocabulary_id)
                 if (result) {
                     popup.state = "success"
                 } else {
