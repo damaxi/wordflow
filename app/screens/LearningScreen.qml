@@ -14,8 +14,19 @@ Pane {
         translated.item.hiddenText = wordArray[index].translated;
     }
 
-    function markWord() {
+    function markWord(progress) {
+        vocabularyImpl.updateProgressById(wordArray[index].id, progress)
+        if (wordArray.length - 1 != index) {
+            reloadWords()
+        } else {
 
+        }
+    }
+
+    function reloadWords() {
+        var current_vocabulary_id = window.vocabularyList[vocabularyBox.currentIndex].id
+        learnScreen.wordArray = vocabularyImpl.listWords(current_vocabulary_id, 10)
+        if (wordArray.length != 0) learnScreen.setNewWord();
     }
 
     function setPrevious() {
@@ -79,21 +90,22 @@ Pane {
     ColumnLayout {
 
         Component.onCompleted: {
-            var current_vocabulary_id = window.vocabularyList[vocabularyBox.currentIndex].id
-            learnScreen.wordArray = vocabularyImpl.listWords(current_vocabulary_id, 10)
-            if (wordArray.length != 0) learnScreen.setNewWord();
+            reloadWords()
         }
 
         anchors.fill: parent
         spacing: 0
 
         Label {
+            id: emptyLabel
             visible: wordArray.length ? false : true
+            anchors.centerIn: parent
             text: qsTr('Your dictonary is empty.')
             font.pixelSize: 24
             horizontalAlignment: Qt.AlignHCenter
             verticalAlignment: Qt.AlignVCenter
             Layout.fillWidth: true
+            Layout.fillHeight: true
         }
 
         Loader {
@@ -116,10 +128,10 @@ Pane {
             target: translated.item
             onClicked: {
                 translated.item.text = translated.item.hiddenText
-                for (var button in ratingButtonGroup.buttons) {
-                    button.enabled = true
-                    //TODO enable all rating buttons
-                }
+                rateAgainButton.enabled = true
+                rateHardButton.enabled = true
+                rateGoodButton.enabled = true
+                rateEasyButton.enabled = true
             }
         }
 
@@ -133,8 +145,10 @@ Pane {
             spacing: 20
 
             Button {
+                id: rateAgainButton
                 text: qsTr("Again")
                 enabled: false
+                visible: wordArray.length ? true : false
                 Material.background: Material.Red
                 Layout.fillWidth: true
                 checkable: true
@@ -143,8 +157,10 @@ Pane {
                 }
             }
             Button {
+                id: rateHardButton
                 text: qsTr("Hard")
                 enabled: false
+                visible: wordArray.length ? true : false
                 Layout.fillWidth: true
                 Material.background: Material.Yellow
                 checkable: true
@@ -153,8 +169,10 @@ Pane {
                 }
             }
             Button {
+                id: rateGoodButton
                 text: qsTr("Good")
                 enabled: false
+                visible: wordArray.length ? true : false
                 Layout.fillWidth: true
                 Material.background: Material.Blue
                 checkable: true
@@ -163,8 +181,10 @@ Pane {
                 }
             }
             Button {
+                id: rateEasyButton
                 text: qsTr("Easy")
                 enabled: false
+                visible: wordArray.length ? true : false
                 Layout.fillWidth: true
                 Material.background: Material.Green
                 checkable: true

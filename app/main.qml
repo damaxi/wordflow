@@ -92,6 +92,7 @@ ApplicationWindow {
                 color: "white"
             }
             onCurrentIndexChanged: {
+                learningScreen.reloadWords()
                 //console.log("current index: " + settings.defaultVocabularyId)
                 //TODO connect index changing with auto vocabulary learning change
             }
@@ -135,7 +136,7 @@ ApplicationWindow {
             id: stackView
             anchors.fill: parent
 
-            initialItem: Screens.LearningScreen {}
+            initialItem: Screens.LearningScreen { id: learningScreen }
             pushEnter: Controls.StackViewCommonTransition {}
             popEnter: Controls.StackViewCommonTransition {}
             popExit: Controls.StackViewCommonTransition {}

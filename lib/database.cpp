@@ -78,6 +78,15 @@ bool Database::updateProgress(QString origin, int vocabulary_id, int progress)
     return m_query.exec();
 }
 
+bool Database::updateProgressById(int word_id, int progress)
+{
+    m_query.prepare("UPDATE words SET progress = :progress "
+                    "WHERE word_id = :word_id");
+    m_query.bindValue(":progress", progress);
+    m_query.bindValue(":word_id", word_id);
+    return m_query.exec();
+}
+
 QVariantList Database::listWords(int vocabulary, int limit, bool sort)
 {
     QString query = "SELECT id, origin, translated, progress FROM words WHERE vocabulary = :vocabulary ";
