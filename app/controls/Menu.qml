@@ -45,6 +45,7 @@ Pane {
         Connections {
             target: learning.item
             onClicked: {
+                learningScreen.reloadWords()
                 showMainMenu()
             }
         }

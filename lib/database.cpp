@@ -81,15 +81,27 @@ bool Database::updateProgress(QString origin, int vocabulary_id, int progress)
 bool Database::updateProgressById(int word_id, int progress)
 {
     m_query.prepare("UPDATE words SET progress = :progress "
-                    "WHERE word_id = :word_id");
+                    "WHERE id = :word_id");
     m_query.bindValue(":progress", progress);
     m_query.bindValue(":word_id", word_id);
     return m_query.exec();
 }
 
-QVariantList Database::listWords(int vocabulary, int limit, bool sort)
+int Database::countWords(int vocabulary_id)
+{
+    QString query = "SELECT COUNT(*) FROM words WHERE vocabulary = :vocabulary_id";
+    m_query.prepare(query);
+    m_query.bindValue(":vocabulary_id", vocabulary_id);
+    m_query.exec();
+    m_query.next();
+    return m_query.value(0).toInt();
+}
+
+QVariantList Database::listWords(int vocabulary, int limit, bool sort, bool completed)
 {
     QString query = "SELECT id, origin, translated, progress FROM words WHERE vocabulary = :vocabulary ";
+    if (completed)
+        query += "AND progress < 100 ";
     if (sort)
         query += "ORDER BY progress ASC ";
     if (limit != std::numeric_limits<int>::max())

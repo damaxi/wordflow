@@ -8,6 +8,7 @@ Pane {
     id: learnScreen
     property var wordArray: []
     property int index: 0
+    property int current_vocabulary_id;
 
     function setNewWord() {
         origin.item.text = wordArray[index].origin;
@@ -16,17 +17,22 @@ Pane {
 
     function markWord(progress) {
         vocabularyImpl.updateProgressById(wordArray[index].id, progress)
-        if (wordArray.length - 1 != index) {
-            reloadWords()
+        index += 1
+        if (wordArray.length != index) {
+            setNewWord()
+            translated.hideCard()
         } else {
-
+            index = 0
+            reloadWords()
         }
     }
 
     function reloadWords() {
-        var current_vocabulary_id = window.vocabularyList[vocabularyBox.currentIndex].id
-        learnScreen.wordArray = vocabularyImpl.listWords(current_vocabulary_id, 10)
+        learnScreen.current_vocabulary_id = window.vocabularyList[vocabularyBox.currentIndex].id
+        learnScreen.wordArray = vocabularyImpl.listWords(learnScreen.current_vocabulary_id, 10)
+        translated.hideCard()
         if (wordArray.length != 0) learnScreen.setNewWord();
+        else emptyLabel.reloadWordNumber()
     }
 
     function setPrevious() {
@@ -89,18 +95,18 @@ Pane {
 
     ColumnLayout {
 
-        Component.onCompleted: {
-            reloadWords()
-        }
-
         anchors.fill: parent
         spacing: 0
 
         Label {
             id: emptyLabel
+            function reloadWordNumber() {
+                wordCount = vocabularyImpl.countWords(learnScreen.current_vocabulary_id)
+            }
+            property int wordCount: vocabularyImpl.countWords(learnScreen.current_vocabulary_id)
             visible: wordArray.length ? false : true
             anchors.centerIn: parent
-            text: qsTr('Your dictonary is empty.')
+            text: qsTr('Your dictonary is empty. You had learn %1 words.').arg(wordCount)
             font.pixelSize: 24
             horizontalAlignment: Qt.AlignHCenter
             verticalAlignment: Qt.AlignVCenter
@@ -118,6 +124,14 @@ Pane {
 
         Loader {
             id: translated
+            function showCard() {
+                item.text = item.hiddenText
+                ratingLayout.rateButtonsEnabled = true
+            }
+            function hideCard() {
+                item.text = ""
+                ratingLayout.rateButtonsEnabled = false
+            }
             visible: wordArray.length ? true : false
             sourceComponent: hoveringButton
             Layout.fillWidth: true
@@ -127,69 +141,61 @@ Pane {
         Connections {
             target: translated.item
             onClicked: {
-                translated.item.text = translated.item.hiddenText
-                rateAgainButton.enabled = true
-                rateHardButton.enabled = true
-                rateGoodButton.enabled = true
-                rateEasyButton.enabled = true
+                translated.showCard()
             }
-        }
-
-        ButtonGroup {
-            id: ratingButtonGroup
-            buttons: ratingLayout.children
         }
 
         RowLayout {
             id: ratingLayout
+            property bool rateButtonsEnabled: false
             spacing: 20
 
             Button {
                 id: rateAgainButton
                 text: qsTr("Again")
-                enabled: false
+                enabled:ratingLayout.rateButtonsEnabled
                 visible: wordArray.length ? true : false
                 Material.background: Material.Red
                 Layout.fillWidth: true
                 checkable: true
                 onCheckedChanged: {
-                        if (checked) console.log('dupa')
+                        markWord(25)
                 }
             }
             Button {
                 id: rateHardButton
                 text: qsTr("Hard")
-                enabled: false
+                enabled: ratingLayout.rateButtonsEnabled
                 visible: wordArray.length ? true : false
                 Layout.fillWidth: true
                 Material.background: Material.Yellow
                 checkable: true
                 onCheckedChanged: {
-                        if (checked) console.log('dupa')
+                        markWord(50)
                 }
             }
             Button {
                 id: rateGoodButton
                 text: qsTr("Good")
-                enabled: false
+                enabled: ratingLayout.rateButtonsEnabled
                 visible: wordArray.length ? true : false
                 Layout.fillWidth: true
                 Material.background: Material.Blue
                 checkable: true
                 onCheckedChanged: {
-                        if (checked) console.log('dupa')
+                        markWord(75)
                 }
             }
             Button {
                 id: rateEasyButton
                 text: qsTr("Easy")
-                enabled: false
+                enabled: ratingLayout.rateButtonsEnabled
                 visible: wordArray.length ? true : false
                 Layout.fillWidth: true
                 Material.background: Material.Green
                 checkable: true
                 onCheckedChanged: {
-                        if (checked) console.log('dupa')
+                        markWord(100)
                 }
             }
         }
