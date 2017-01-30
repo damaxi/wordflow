@@ -94,6 +94,10 @@ ApplicationWindow {
             onCurrentIndexChanged: {
                 window.current_vocabulary_id = window.vocabularyList[vocabularyBox.currentIndex].id
                 learningScreen.reloadWords()
+                if (typeof stackView.currentItem.reload == 'function') {
+                    stackView.currentItem.reload();
+                }
+
                 //console.log("current index: " + settings.defaultVocabularyId)
                 //TODO connect index changing with auto vocabulary learning change
             }

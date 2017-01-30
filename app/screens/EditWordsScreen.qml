@@ -8,10 +8,14 @@ Pane {
     id: editWordsScreen
     focus: true
     property var wordsArray: []
-    Component.onCompleted: {
+    function reload() {
         wordsArray = vocabularyImpl.listWords(window.current_vocabulary_id)
+        list.forceActiveFocus() //this is the hack probably something stole focusing
     }
-    Keys.onLeftPressed: console.log("left")
+
+    Component.onCompleted: {
+        reload()
+    }
     Component {
         id: wordRow
         RowLayout {
@@ -20,19 +24,21 @@ Pane {
                 text: modelData.origin;
                 font.pixelSize: 24
                 Layout.minimumWidth: editWordsScreen.width * 2 / 6
+                elide: Text.ElideRight
                 Layout.fillWidth: true
             }
             Label {
                 text: modelData.translated;
                 font.pixelSize: 24
-                Layout.minimumWidth: editWordsScreen.width * 3 / 6
+                Layout.minimumWidth: editWordsScreen.width * 2 / 6
+                elide: Text.ElideRight
                 Layout.fillWidth: true
             }
             ProgressBar {
                 value: modelData.progress
                 from: 0; to: 100
-                Layout.minimumWidth: editWordsScreen.width / 6
-                Layout.margins: 5
+                implicitWidth: editWordsScreen.width * 2 / 6
+                Layout.minimumWidth: implicitWidth
                 Layout.alignment: Qt.AlignCenter
                 Material.foreground: Material.Red
             }
@@ -82,7 +88,10 @@ Pane {
             header: wordHeader
             delegate: wordRow
             highlight: highlight
-           // highlightFollowsCurrentItem: false
+        }
+        GridLayout {
+            columns: 2; rows: 2
+
         }
     }
 }

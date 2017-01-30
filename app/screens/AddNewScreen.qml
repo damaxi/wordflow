@@ -10,6 +10,7 @@ Pane {
 
         spacing: 2
         anchors.fill: parent
+        anchors.margins: 20
         focus: true
 
         Label {
