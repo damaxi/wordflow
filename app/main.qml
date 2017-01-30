@@ -12,6 +12,7 @@ ApplicationWindow {
     id: window
     flags: Qt.Window
     property var vocabularyList: []
+    property int current_vocabulary_id: 0
 
     Component.onCompleted: {
         vocabularyImpl.createDatabase()
@@ -36,7 +37,6 @@ ApplicationWindow {
     minimumWidth: 800
     minimumHeight: 800
     title: qsTr("WordFlow")
-
 
     Settings {
         id: settings
@@ -92,6 +92,7 @@ ApplicationWindow {
                 color: "white"
             }
             onCurrentIndexChanged: {
+                window.current_vocabulary_id = window.vocabularyList[vocabularyBox.currentIndex].id
                 learningScreen.reloadWords()
                 //console.log("current index: " + settings.defaultVocabularyId)
                 //TODO connect index changing with auto vocabulary learning change
@@ -104,10 +105,12 @@ ApplicationWindow {
 
     Controls.Menu {
         id: actionPane
+        focus: false
     }
 
     Pane {
         id: vocabulary
+        focus: true
         width: window.width - actionPane.width
         height: window.height - toolBar.height
         anchors.left: actionPane.right
@@ -135,12 +138,13 @@ ApplicationWindow {
         StackView {
             id: stackView
             anchors.fill: parent
-
+            focus: true
             initialItem: Screens.LearningScreen { id: learningScreen }
             pushEnter: Controls.StackViewCommonTransition {}
             popEnter: Controls.StackViewCommonTransition {}
             popExit: Controls.StackViewCommonTransition {}
             pushExit: Controls.StackViewCommonTransition {}
+            focusPolicy: Qt.StrongFocus
         }
     }
 

@@ -97,10 +97,10 @@ int Database::countWords(int vocabulary_id)
     return m_query.value(0).toInt();
 }
 
-QVariantList Database::listWords(int vocabulary, int limit, bool sort, bool completed)
+QVariantList Database::listWords(int vocabulary, int limit, bool sort, bool onlyNotCompleted)
 {
     QString query = "SELECT id, origin, translated, progress FROM words WHERE vocabulary = :vocabulary ";
-    if (completed)
+    if (onlyNotCompleted)
         query += "AND progress < 100 ";
     if (sort)
         query += "ORDER BY progress ASC ";

@@ -13,5 +13,6 @@
         <file>controls/Menu.qml</file>
         <file>screens/AddNewVocabularyScreen.qml</file>
         <file>controls/StackViewCommonTransition.qml</file>
+        <file>screens/EditWordsScreen.qml</file>
     </qresource>
 </RCC>

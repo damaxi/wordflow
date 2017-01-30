@@ -8,7 +8,7 @@ Pane {
     id: learnScreen
     property var wordArray: []
     property int index: 0
-    property int current_vocabulary_id;
+    Keys.onLeftPressed: console.log("left")
 
     function setNewWord() {
         origin.item.text = wordArray[index].origin;
@@ -28,8 +28,7 @@ Pane {
     }
 
     function reloadWords() {
-        learnScreen.current_vocabulary_id = window.vocabularyList[vocabularyBox.currentIndex].id
-        learnScreen.wordArray = vocabularyImpl.listWords(learnScreen.current_vocabulary_id, 10)
+        learnScreen.wordArray = vocabularyImpl.listWords(window.current_vocabulary_id, 10, true, true)
         translated.hideCard()
         if (wordArray.length != 0) learnScreen.setNewWord();
         else emptyLabel.reloadWordNumber()
@@ -101,9 +100,9 @@ Pane {
         Label {
             id: emptyLabel
             function reloadWordNumber() {
-                wordCount = vocabularyImpl.countWords(learnScreen.current_vocabulary_id)
+                wordCount = vocabularyImpl.countWords(window.current_vocabulary_id)
             }
-            property int wordCount: vocabularyImpl.countWords(learnScreen.current_vocabulary_id)
+            property int wordCount: vocabularyImpl.countWords(window.current_vocabulary_id)
             visible: wordArray.length ? false : true
             anchors.centerIn: parent
             text: qsTr('Your dictonary is empty. You had learn %1 words.').arg(wordCount)

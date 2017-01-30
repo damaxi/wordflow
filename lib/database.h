@@ -23,7 +23,7 @@ public:
     Q_INVOKABLE bool updateProgress(QString origin, int vocabulary_id, int progress);
     Q_INVOKABLE bool updateProgressById(int word_id, int progress);
     Q_INVOKABLE int countWords(int vocabulary_id);
-    Q_INVOKABLE QVariantList listWords(int vocabulary, int limit = std::numeric_limits<int>::max(), bool sort = true, bool completed = true);
+    Q_INVOKABLE QVariantList listWords(int vocabulary, int limit = std::numeric_limits<int>::max(), bool sort = false, bool onlyNotCompleted = false);
     Q_INVOKABLE QVariantList listVocabularies();
     void cleanTables();
     void removeDatabase();

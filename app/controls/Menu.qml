@@ -23,6 +23,7 @@ Pane {
         id: menuButton
         Button {
             Material.background: Material.Orange
+            focusPolicy: Qt.NoFocus
         }
     }
 
@@ -68,8 +69,25 @@ Pane {
         }
 
         Loader {
-            id: addNewVocabulary
+            id: editWords
             anchors.top: addNewWord.bottom
+            Layout.fillWidth: true
+            sourceComponent: menuButton
+            onLoaded: {
+                item.text = qsTr("Edit words")
+            }
+        }
+
+        Connections {
+            target: editWords.item
+            onClicked: {
+                showSubMenu("qrc:/screens/EditWordsScreen.qml")
+            }
+        }
+
+        Loader {
+            id: addNewVocabulary
+            anchors.top: editWords.bottom
             Layout.fillWidth: true
             sourceComponent: menuButton
             onLoaded: {
