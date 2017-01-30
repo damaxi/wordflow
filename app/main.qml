@@ -1,6 +1,6 @@
 import QtQuick 2.7
-import QtQuick.Controls 2.0
-import QtQuick.Window 2.2
+import QtQuick.Controls 2.1
+import QtQuick.Window 2.0
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Material 2.0
 import QtQuick.Controls.Styles 1.4
@@ -33,8 +33,8 @@ ApplicationWindow {
     visible: true
     Material.theme: Material.Dark
     Material.accent: Material.Red
-    width:  Screen.desktopAvailableWidth / 3
-    height: Screen.desktopAvailableHeight * 2 / 3
+    minimumWidth: 800
+    minimumHeight: 800
     title: qsTr("WordFlow")
 
 
