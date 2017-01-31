@@ -68,6 +68,16 @@ bool Database::createWord(QString origin, QString translated, int vocabulary_id)
     return m_query.exec();
 }
 
+bool Database::updateWord(int word_id, QString origin, QString translated)
+{
+    m_query.prepare("UPDATE words SET origin = :origin, translated = :translated "
+                    "WHERE id = :word_id");
+    m_query.bindValue(":origin", origin);
+    m_query.bindValue(":translated", translated);
+    m_query.bindValue(":word_id", word_id);
+    return m_query.exec();
+}
+
 bool Database::updateProgress(QString origin, int vocabulary_id, int progress)
 {
     m_query.prepare("UPDATE words SET progress = :progress "
