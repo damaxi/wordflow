@@ -78,6 +78,13 @@ bool Database::updateWord(int word_id, QString origin, QString translated)
     return m_query.exec();
 }
 
+bool Database::deleteWord(int word_id)
+{
+    m_query.prepare("DELETE FROM words WHERE id = :word_id");
+    m_query.bindValue(":word_id", word_id);
+    return m_query.exec();
+}
+
 bool Database::updateProgress(QString origin, int vocabulary_id, int progress)
 {
     m_query.prepare("UPDATE words SET progress = :progress "

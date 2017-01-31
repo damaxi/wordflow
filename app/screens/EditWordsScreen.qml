@@ -87,7 +87,7 @@ Pane {
             id: list
             focus: true
             spacing: 5
-            height: editWordsScreen.height * 3 / 4
+            height: editWordsScreen.height * 3 / 5
             model: editWordsScreen.wordsArray
             header: wordHeader
             delegate: wordRow
@@ -98,7 +98,7 @@ Pane {
             }
         }
         GridLayout {
-            columns: 1; rows: 3
+            columns: 2; rows: 4
             Layout.fillHeight: true
             Layout.fillWidth: true
             TextArea {
@@ -107,6 +107,7 @@ Pane {
                 Layout.fillWidth: true
                 KeyNavigation.tab: translated
                 KeyNavigation.priority: KeyNavigation.BeforeItem
+                Layout.columnSpan: 2
             }
             TextArea {
                 id: translated
@@ -114,15 +115,39 @@ Pane {
                 Layout.fillWidth: true
                 KeyNavigation.tab: update
                 KeyNavigation.priority: KeyNavigation.BeforeItem
+                Layout.columnSpan: 2
             }
             Button {
                 id: update
-                text: "Update"
+                text: qsTr("Update")
                 Layout.fillWidth: true
-                KeyNavigation.tab: list
+                KeyNavigation.tab: deleteButton
                 Keys.onReturnPressed: clicked()
                 onClicked: {
                     vocabularyImpl.updateWord(wordsArray[list.currentIndex].id, origin.text, translated.text)
+                    editWordsScreen.reload()
+                }
+            }
+            Button {
+                id: deleteButton
+                text: qsTr("Delete")
+                Layout.fillWidth: true
+                KeyNavigation.tab: addButton
+                Keys.onReturnPressed: clicked()
+                onClicked: {
+                    vocabularyImpl.deleteWord(wordsArray[list.currentIndex].id)
+                    editWordsScreen.reload()
+                }
+            }
+            Button {
+                id: addButton
+                text: qsTr("Add")
+                Layout.fillWidth: true
+                Layout.columnSpan: 2
+                KeyNavigation.tab: list
+                Keys.onReturnPressed: clicked()
+                onClicked: {
+                    vocabularyImpl.createWord(origin.text, translated.text, window.current_vocabulary_id)
                     editWordsScreen.reload()
                 }
             }

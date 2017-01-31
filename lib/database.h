@@ -21,6 +21,7 @@ public:
     Q_INVOKABLE bool createVocabulary(QString vocabulary, QString description);
     Q_INVOKABLE bool createWord(QString origin, QString translated, int vocabulary_id = 0);
     Q_INVOKABLE bool updateWord(int word_id, QString origin, QString translated);
+    Q_INVOKABLE bool deleteWord(int word_id);
     Q_INVOKABLE bool updateProgress(QString origin, int vocabulary_id, int progress);
     Q_INVOKABLE bool updateProgressById(int word_id, int progress);
     Q_INVOKABLE int countWords(int vocabulary_id);
