@@ -52,25 +52,8 @@ Pane {
         }
 
         Loader {
-            id: addNewWord
-            anchors.top: learning.bottom
-            Layout.fillWidth: true
-            sourceComponent: menuButton
-            onLoaded: {
-                item.text = qsTr("Add word")
-            }
-        }
-
-        Connections {
-            target: addNewWord.item
-            onClicked: {
-                showSubMenu("qrc:/screens/AddNewScreen.qml")
-            }
-        }
-
-        Loader {
             id: editWords
-            anchors.top: addNewWord.bottom
+            anchors.top: learning.bottom
             Layout.fillWidth: true
             sourceComponent: menuButton
             onLoaded: {

@@ -22,8 +22,9 @@ public:
     Q_INVOKABLE bool createWord(QString origin, QString translated, int vocabulary_id = 0);
     Q_INVOKABLE bool updateWord(int word_id, QString origin, QString translated);
     Q_INVOKABLE bool deleteWord(int word_id);
-    Q_INVOKABLE bool updateProgress(QString origin, int vocabulary_id, int progress);
-    Q_INVOKABLE bool updateProgressById(int word_id, int progress);
+    Q_INVOKABLE bool deleteAll(int vocabulary_id);
+    Q_INVOKABLE bool updateProgress(int word_id, int progress);
+    Q_INVOKABLE bool resetProgresses(int vocabulary_id);
     Q_INVOKABLE int countWords(int vocabulary_id);
     Q_INVOKABLE QVariantList listWords(int vocabulary, int limit = std::numeric_limits<int>::max(), bool sort = false, bool onlyNotCompleted = false);
     Q_INVOKABLE QVariantList listVocabularies();

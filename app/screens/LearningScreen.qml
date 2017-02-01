@@ -16,7 +16,7 @@ Pane {
     }
 
     function markWord(progress) {
-        vocabularyImpl.updateProgressById(wordArray[index].id, progress)
+        vocabularyImpl.updateProgress(wordArray[index].id, progress)
         index += 1
         if (wordArray.length != index) {
             setNewWord()

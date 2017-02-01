@@ -85,22 +85,27 @@ bool Database::deleteWord(int word_id)
     return m_query.exec();
 }
 
-bool Database::updateProgress(QString origin, int vocabulary_id, int progress)
+bool Database::deleteAll(int vocabulary_id)
 {
-    m_query.prepare("UPDATE words SET progress = :progress "
-                    "WHERE origin = :origin AND vocabulary = :vocabulary_id");
-    m_query.bindValue(":progress", progress);
-    m_query.bindValue(":origin", origin);
+    m_query.prepare("DELETE FROM words WHERE vocabulary = :vocabulary_id");
     m_query.bindValue(":vocabulary_id", vocabulary_id);
     return m_query.exec();
 }
 
-bool Database::updateProgressById(int word_id, int progress)
+bool Database::updateProgress(int word_id, int progress)
 {
     m_query.prepare("UPDATE words SET progress = :progress "
                     "WHERE id = :word_id");
     m_query.bindValue(":progress", progress);
     m_query.bindValue(":word_id", word_id);
+    return m_query.exec();
+}
+
+bool Database::resetProgresses(int vocabulary_id)
+{
+    m_query.prepare("UPDATE words SET progress = 0 "
+                    "WHERE vocabulary = :vocabulary_id");
+    m_query.bindValue(":vocabulary_id", vocabulary_id);
     return m_query.exec();
 }
 

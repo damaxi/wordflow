@@ -6,7 +6,6 @@
         <file>images/drawer@2x.png</file>
         <file>images/drawer@3x.png</file>
         <file>images/drawer@4x.png</file>
-        <file>screens/AddNewScreen.qml</file>
         <file>screens/LearningScreen.qml</file>
         <file>controls/ConfigurationPopup.qml</file>
         <file>screens/SplashScreen.qml</file>
