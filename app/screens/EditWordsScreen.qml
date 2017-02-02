@@ -29,39 +29,73 @@ Pane {
     }
     Component {
         id: wordRow
-        RowLayout {
+        ColumnLayout {
             id: delegateRow
             width: editWordsScreen.width - 30
             clip: true
             Label {
+                id: origin
                 text: modelData.origin;
                 font.pixelSize: 24
-                Layout.minimumWidth: delegateRow.width * 2 / 6
+                Layout.minimumWidth: delegateRow.width
+                horizontalAlignment: Qt.AlignHCenter
                 elide: Text.ElideRight
                 Layout.fillWidth: true
             }
             Label {
-                text: modelData.translated;
+                id: translated
+                text: modelData.translated
+                visible: false
+                enabled: false
                 font.pixelSize: 24
-                Layout.minimumWidth: delegateRow.width * 2 / 6
+                Layout.minimumWidth: delegateRow.width
+                horizontalAlignment: Qt.AlignHCenter
                 elide: Text.ElideRight
                 Layout.fillWidth: true
+                // http://stackoverflow.com/questions/19207913/removing-empty-spaces-when-the-delegate-is-not-visible-in-a-gridview
             }
             ProgressBar {
+                id: progress
                 value: modelData.progress
+                visible: false
+                enabled: false
                 from: 0; to: 100
-                implicitWidth: delegateRow.width * 2 / 6
+                implicitWidth: delegateRow.width
                 Layout.minimumWidth: implicitWidth
                 Layout.alignment: Qt.AlignCenter
-                Material.foreground: Material.Red
+                Material.foreground: Material.White
             }
+            states: [
+                State {
+                    name: "showDetails"
+                    PropertyChanges {
+                        target: translated
+                        visible: true
+                        enabled: true
+                    }
+                    PropertyChanges {
+                        target: progress
+                        visible: true
+                        enabled: true
+                    }
+                }
+            ]
             MouseArea {
                 anchors.fill: parent
-                onClicked: list.currentIndex = index
+                onClicked: {
+                    list.currentIndex = index
+                    list.lastShowedItem = delegateRow
+                    delegateRow.state = "showDetails"
+                    updateButton.clicked()
+                    contextPanel.forceActiveFocus()
+                }
             }
             Keys.onReturnPressed: {
                 updateButton.checked = true
+                list.lastShowedItem = delegateRow
+                delegateRow.state = "showDetails"
                 updateButton.clicked()
+                contextPanel.forceActiveFocus()
             }
         }
     }
@@ -102,6 +136,7 @@ Pane {
 
         ListView {
             id: list
+            property var lastShowedItem
             focus: true
             spacing: 5
             height: editWordsScreen.height
@@ -110,8 +145,8 @@ Pane {
             delegate: wordRow
             highlight: highlight
             onCurrentIndexChanged: {
-                if (!addButton.checked)
-                    editWordsScreen.fillConextPanel()
+                if (typeof list.lastShowedItem !== 'undefined') list.lastShowedItem.state = ""
+                contextPanelButtons.uncheckAllAndHide()
             }
         }
     }
@@ -126,9 +161,18 @@ Pane {
     ColumnLayout {
         anchors.bottom: parent.bottom
         width: editWordsScreen.width - 30
-        Keys.onEscapePressed: contextPanelButtons.uncheckAllAndHide()
-        Keys.onDownPressed: list.incrementCurrentIndex()
-        Keys.onUpPressed: list.decrementCurrentIndex()
+        Keys.onEscapePressed: {
+            contextPanelButtons.uncheckAllAndHide()
+            list.forceActiveFocus()
+        }
+        Keys.onDownPressed: {
+            list.incrementCurrentIndex()
+            list.forceActiveFocus()
+        }
+        Keys.onUpPressed: {
+            list.decrementCurrentIndex()
+            list.forceActiveFocus()
+        }
         RowLayout {
             Button {
                 id: updateButton
