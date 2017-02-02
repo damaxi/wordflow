@@ -60,12 +60,10 @@ Pane {
         Button {
             id: button
             property string hiddenText: ''
-            font.pixelSize: 24
+            font.pixelSize: 28
             hoverEnabled: true
             onHoveredChanged: {
-                if (hovered && hiddenText.length != 0) {
-                    button.state = 'HoveringTranslated'
-                } else if (hovered) {
+                if (hovered) {
                     button.state = 'Hovering'
                 } else {
                     button.state = ''
@@ -76,16 +74,7 @@ Pane {
                     name: "Hovering"
                     PropertyChanges {
                         target: button
-                        font.pixelSize: 28
-                        Material.background: Material.DeepPurple
-                    }
-                },
-                State {
-                    name: "HoveringTranslated"
-                    PropertyChanges {
-                        target: button
-                        font.pixelSize: 28
-                        Material.background: Material.DeepOrange
+                        Material.background: "#41cd52"
                     }
                 }
             ]
@@ -154,7 +143,7 @@ Pane {
                 text: qsTr("Again")
                 enabled:ratingLayout.rateButtonsEnabled
                 visible: wordArray.length ? true : false
-                Material.background: Material.Red
+                Material.background: "#36703d"
                 Layout.fillWidth: true
                 checkable: true
                 onCheckedChanged: {
@@ -167,7 +156,7 @@ Pane {
                 enabled: ratingLayout.rateButtonsEnabled
                 visible: wordArray.length ? true : false
                 Layout.fillWidth: true
-                Material.background: Material.Yellow
+                Material.background: "#3a8e44"
                 checkable: true
                 onCheckedChanged: {
                         markWord(50)
@@ -179,7 +168,7 @@ Pane {
                 enabled: ratingLayout.rateButtonsEnabled
                 visible: wordArray.length ? true : false
                 Layout.fillWidth: true
-                Material.background: Material.Blue
+                Material.background: "#3faf4d"
                 checkable: true
                 onCheckedChanged: {
                         markWord(75)
@@ -191,7 +180,7 @@ Pane {
                 enabled: ratingLayout.rateButtonsEnabled
                 visible: wordArray.length ? true : false
                 Layout.fillWidth: true
-                Material.background: Material.Green
+                Material.background: "#41cd52"
                 checkable: true
                 onCheckedChanged: {
                         markWord(100)

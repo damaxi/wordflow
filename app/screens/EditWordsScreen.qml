@@ -162,7 +162,7 @@ Pane {
                 text: qsTr("Reset All")
                 enabled: wordsArray.length > 0
                 Layout.fillWidth: true
-                Material.background: Material.DeepPurple
+                Material.background: "#3faf4d"
                 onClicked: {
                     vocabularyImpl.resetProgresses(window.current_vocabulary_id)
                     editWordsScreen.reload()
@@ -174,7 +174,7 @@ Pane {
                 text: qsTr("Delete All")
                 enabled: wordsArray.length > 0
                 Layout.fillWidth: true
-                Material.background: Material.DeepPurple
+                Material.background: "#3faf4d"
                 onClicked: {
                     vocabularyImpl.deleteAll(window.current_vocabulary_id)
                     editWordsScreen.reload()

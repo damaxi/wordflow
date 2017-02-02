@@ -32,8 +32,6 @@ ApplicationWindow {
     }
 
     visible: true
-    Material.theme: Material.Dark
-    Material.accent: Material.Red
     minimumWidth: 800
     minimumHeight: 800
     title: qsTr("WordFlow")

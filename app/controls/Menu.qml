@@ -6,7 +6,6 @@ import QtQuick.Controls.Material 2.0
 Pane {
     width: Math.min(window.width, window.height) / 3
     height: window.height //- toolBar.height
-    Material.background: Material.Teal
 
     function showSubMenu(url) {
         if (stackView.depth > 1)
@@ -22,7 +21,7 @@ Pane {
     Component {
         id: menuButton
         Button {
-            Material.background: Material.Orange
+            Material.background: "#41cd52"
             focusPolicy: Qt.NoFocus
         }
     }
@@ -30,8 +29,6 @@ Pane {
     ColumnLayout {
         spacing: 10
         anchors.fill: parent
-
-        //Material.elevation: 0
 
         Loader {
             id: learning
