@@ -34,7 +34,6 @@ Pane {
             width: editWordsScreen.width - 30
             spacing: 10
             anchors.margins: 10
-            clip: true
             Label {
                 id: origin
                 text: modelData.origin;
@@ -47,6 +46,7 @@ Pane {
                     anchors.fill: parent
                     onClicked: {
                         list.currentIndex = index
+                        updateButton.checked = true
                         list.lastShowedItem = delegateRow
                         delegateRow.state = "showDetails"
                         updateButton.clicked()
@@ -102,10 +102,9 @@ Pane {
         id: wordHeader
         RowLayout {
             width: editWordsScreen.width - 30
-            Label {
-                text: "Word List"
+            TextField {
+                placeholderText: qsTr("type word")
                 font { pixelSize: 28; bold: true }
-                horizontalAlignment: Qt.AlignHCenter
                 Layout.fillWidth: true
             }
         }
