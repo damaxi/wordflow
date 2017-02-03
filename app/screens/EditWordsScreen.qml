@@ -29,41 +29,51 @@ Pane {
     }
     Component {
         id: wordRow
-        ColumnLayout {
+        Column {
             id: delegateRow
             width: editWordsScreen.width - 30
+            spacing: 10
+            anchors.margins: 10
             clip: true
             Label {
                 id: origin
                 text: modelData.origin;
                 font.pixelSize: 24
-                Layout.minimumWidth: delegateRow.width
+                anchors.left: delegateRow.left
+                anchors.right: delegateRow.right
                 horizontalAlignment: Qt.AlignHCenter
                 elide: Text.ElideRight
-                Layout.fillWidth: true
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        list.currentIndex = index
+                        list.lastShowedItem = delegateRow
+                        delegateRow.state = "showDetails"
+                        updateButton.clicked()
+                        contextPanel.forceActiveFocus()
+                    }
+                }
             }
             Label {
                 id: translated
                 text: modelData.translated
                 visible: false
-                enabled: false
                 font.pixelSize: 24
-                Layout.minimumWidth: delegateRow.width
+                anchors.left: delegateRow.left
+                anchors.right: delegateRow.right
                 horizontalAlignment: Qt.AlignHCenter
                 elide: Text.ElideRight
-                Layout.fillWidth: true
-                // http://stackoverflow.com/questions/19207913/removing-empty-spaces-when-the-delegate-is-not-visible-in-a-gridview
             }
             ProgressBar {
                 id: progress
                 value: modelData.progress
                 visible: false
-                enabled: false
                 from: 0; to: 100
                 implicitWidth: delegateRow.width
-                Layout.minimumWidth: implicitWidth
-                Layout.alignment: Qt.AlignCenter
-                Material.foreground: Material.White
+                anchors.left: delegateRow.left
+                anchors.right: delegateRow.right
+                anchors.horizontalCenter: delegateRow.Center
+                padding: 10
             }
             states: [
                 State {
@@ -71,25 +81,13 @@ Pane {
                     PropertyChanges {
                         target: translated
                         visible: true
-                        enabled: true
                     }
                     PropertyChanges {
                         target: progress
                         visible: true
-                        enabled: true
                     }
                 }
             ]
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    list.currentIndex = index
-                    list.lastShowedItem = delegateRow
-                    delegateRow.state = "showDetails"
-                    updateButton.clicked()
-                    contextPanel.forceActiveFocus()
-                }
-            }
             Keys.onReturnPressed: {
                 updateButton.checked = true
                 list.lastShowedItem = delegateRow
@@ -119,6 +117,7 @@ Pane {
               width: list.width
               height: list.currentItem.height
               color: "#26a837"
+              opacity: 0.5
               radius: 5
               y: list.currentItem.y
               Behavior on y {
