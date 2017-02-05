@@ -1,6 +1,5 @@
 #include "database.h"
 
-#include <QDir>
 #include <QSqlError>
 #include <QVariant>
 #include <QDebug>
@@ -11,10 +10,10 @@
 Database::Database(QObject *parent)
     :
       QObject(parent),
-      m_path(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation)[0]),
+      m_path(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)),
       m_database(QSqlDatabase::addDatabase("QSQLITE")),
       m_query(),
-      m_database_name("/wordflow.sql")
+      m_database_name("/wordflow.sqlite3")
 {
     openDatabase();
 }
@@ -26,13 +25,13 @@ Database::~Database()
 
 void Database::openDatabase()
 {
-    QDir dir(m_path);
-    if(!dir.exists())
-        dir.mkpath(m_path);
-    m_database.setDatabaseName(m_path + m_database_name);
+    if(!m_path.mkpath("."))
+        qFatal("Failed to create writable directory at %s", qPrintable(m_path.absolutePath()));
+    const QString fileName = m_path.absolutePath() + m_database_name;
+    m_database.setDatabaseName(fileName);
     if(!m_database.open()) {
-        qFatal("No database connection.");
-        qDebug() << m_database.lastError().text();
+        qFatal("No database connection: %s", qPrintable(m_database.lastError().text()));
+        QFile::remove(fileName);
         QCoreApplication::quit();
     }
 }
@@ -43,10 +42,6 @@ void Database::createDatabase()
                        "(id INTEGER PRIMARY KEY AUTOINCREMENT, "
                        "vocabulary_name TEXT UNIQUE NOT NULL, "
                        "vocabulary_description TEXT NOT NULL)");
-    m_query.exec("CREATE TABLE words (id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                 "vocabulary INTEGER NOT NULL, origin TEXT NOT NULL, "
-                 "translated TEXT NOT NULL, progress INTEGER DEFAULT 0, "
-                 "FOREIGN KEY(vocabulary) REFERENCES vocabularies(id))");
 }
 
 bool Database::createVocabulary(QString vocabulary, QString description)
@@ -150,7 +145,7 @@ QVariantList Database::listWords(int vocabulary, int limit, bool sort, bool only
 
 QString Database::path() const
 {
-    return m_path + m_database_name;
+    return m_path.absolutePath() + m_database_name;
 }
 
 void Database::runSql()
@@ -170,7 +165,7 @@ void Database::cleanTables()
 void Database::removeDatabase()
 {
     m_database.close();
-    QFile file(m_path + m_database_name);
+    QFile file(m_path.absolutePath() + m_database_name);
     if (file.exists())
         file.remove();
 }

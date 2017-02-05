@@ -3,6 +3,7 @@ import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Material 2.0
 import QtQuick.Controls.Styles 1.4
+import io.github.damaxi 1.0
 
 Pane {
     id: editWordsScreen
@@ -21,8 +22,8 @@ Pane {
         translated.text = ""
     }
     function fillConextPanel() {
-        origin.text = wordsArray[list.currentIndex].origin
-        translated.text = wordsArray[list.currentIndex].translated
+        origin.text = list.currentItem.origin
+        translated.text = list.currentItem.translated
     }
     Component.onCompleted: {
         reload()
@@ -31,12 +32,14 @@ Pane {
         id: wordRow
         Column {
             id: delegateRow
+            property alias origin: origin.text
+            property alias translated: translated.text
             width: editWordsScreen.width - 30
             spacing: 10
             anchors.margins: 10
             Label {
                 id: origin
-                text: modelData.origin;
+                text: model.origin;
                 font.pixelSize: 24
                 anchors.left: delegateRow.left
                 anchors.right: delegateRow.right
@@ -56,7 +59,7 @@ Pane {
             }
             Label {
                 id: translated
-                text: modelData.translated
+                text: model.translated
                 visible: false
                 font.pixelSize: 24
                 anchors.left: delegateRow.left
@@ -66,7 +69,7 @@ Pane {
             }
             ProgressBar {
                 id: progress
-                value: modelData.progress
+                value: model.progress
                 visible: false
                 from: 0; to: 100
                 implicitWidth: delegateRow.width
@@ -134,17 +137,20 @@ Pane {
 
         ListView {
             id: list
-            property var lastShowedItem
+            property var lastShowedItem: null
             focus: true
             spacing: 5
             height: editWordsScreen.height
-            model: editWordsScreen.wordsArray
+            model: WordsModel { }
             header: wordHeader
             delegate: wordRow
             highlight: highlight
             onCurrentIndexChanged: {
-                if (typeof list.lastShowedItem !== 'undefined') list.lastShowedItem.state = ""
+                if (list.lastShowedItem != null) list.lastShowedItem.state = ""
                 contextPanelButtons.uncheckAllAndHide()
+            }
+            onModelChanged: {
+                list.lastShowedItem = null
             }
         }
     }
@@ -154,6 +160,7 @@ Pane {
             updateButton.checked = false
             addButton.checked = false
             contextPanel.visible = false
+            list.forceActiveFocus()
         }
     }
     ColumnLayout {
@@ -206,8 +213,7 @@ Pane {
                 Layout.fillWidth: true
                 Material.background: "#3faf4d"
                 onClicked: {
-                    vocabularyImpl.resetProgresses(window.current_vocabulary_id)
-                    editWordsScreen.reload()
+                    list.model.resetAll()
                     contextPanelButtons.uncheckAllAndHide()
                 }
             }
@@ -218,8 +224,7 @@ Pane {
                 Layout.fillWidth: true
                 Material.background: "#3faf4d"
                 onClicked: {
-                    vocabularyImpl.deleteAll(window.current_vocabulary_id)
-                    editWordsScreen.reload()
+                    list.model.removeAll()
                     contextPanelButtons.uncheckAllAndHide()
                 }
             }
@@ -263,11 +268,9 @@ Pane {
                 Keys.onReturnPressed: clicked()
                 onClicked: {
                     if (updateButton.checked) {
-                        vocabularyImpl.updateWord(wordsArray[list.currentIndex].id, origin.text, translated.text)
-                        editWordsScreen.reload()
+                        list.model.updateWord(list.currentIndex, origin.text, translated.text)
                     } else {
-                        vocabularyImpl.createWord(origin.text, translated.text, window.current_vocabulary_id)
-                        editWordsScreen.reload()
+                        list.model.addWord(origin.text, translated.text, window.current_vocabulary_id)
                     }
                     contextPanelButtons.uncheckAllAndHide()
                 }
@@ -280,8 +283,7 @@ Pane {
                 KeyNavigation.tab: resetProgress
                 Keys.onReturnPressed: clicked()
                 onClicked: {
-                    vocabularyImpl.deleteWord(wordsArray[list.currentIndex].id)
-                    editWordsScreen.reload()
+                    list.model.removeWord(list.currentIndex)
                     contextPanelButtons.uncheckAllAndHide()
                 }
             }
@@ -293,8 +295,7 @@ Pane {
                 KeyNavigation.tab: origin
                 Keys.onReturnPressed: clicked()
                 onClicked: {
-                    vocabularyImpl.updateProgress(wordsArray[list.currentIndex].id, 0)
-                    editWordsScreen.reload()
+                    list.model.updateProgress(list.currentIndex, 0)
                     contextPanelButtons.uncheckAllAndHide()
                 }
             }

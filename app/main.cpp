@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QStandardPaths>
 #include "vocabularypresenter.h"
+#include "sqlwordsmodel.h"
 
 int main(int argc, char *argv[])
 {
@@ -17,6 +18,7 @@ int main(int argc, char *argv[])
         QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
 
+    qmlRegisterType<SqlWordsModel>("io.github.damaxi", 1, 0, "WordsModel");
 //    QSettings settings;
 //    QString style = QQuickStyle::name();
 //    style = "Material";
@@ -28,9 +30,6 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
     VocabularyPresenter vocabulary;
     engine.rootContext()->setContextProperty("vocabularyImpl", &vocabulary);
-    engine.setOfflineStoragePath(
-                QStandardPaths::standardLocations(QStandardPaths::AppDataLocation)[0]);
-    qDebug() << engine.offlineStoragePath();
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;

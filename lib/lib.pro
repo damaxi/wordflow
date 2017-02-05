@@ -12,10 +12,12 @@ TEMPLATE = lib
 CONFIG += staticlib c++11
 
 SOURCES += database.cpp \
-    sqlerror.cpp
+    sqlerror.cpp \
+    sqlwordsmodel.cpp
 
 HEADERS += database.h \
-    sqlerror.h
+    sqlerror.h \
+    sqlwordsmodel.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

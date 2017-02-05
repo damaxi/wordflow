@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QDir>
 #include <QSqlQuery>
 #include <QSqlDatabase>
 #include <QPair>
@@ -34,7 +35,7 @@ public:
 private:
     void runSql();
 
-    QString m_path;
+    const QDir m_path;
     QSqlDatabase m_database;
     QSqlQuery m_query;
 
