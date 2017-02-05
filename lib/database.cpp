@@ -1,6 +1,5 @@
 #include "database.h"
 
-#include <QDir>
 #include <QSqlError>
 #include <QVariant>
 #include <QDebug>
@@ -11,10 +10,10 @@
 Database::Database(QObject *parent)
     :
       QObject(parent),
-      m_path(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation)[0]),
+      m_path(QStandardPaths::writetableLocation(QStandardPaths::AppDataLocation)),
       m_database(QSqlDatabase::addDatabase("QSQLITE")),
       m_query(),
-      m_database_name("/wordflow.sql")
+      m_database_name("/wordflow.sqlite3")
 {
     openDatabase();
 }
@@ -26,10 +25,9 @@ Database::~Database()
 
 void Database::openDatabase()
 {
-    QDir dir(m_path);
-    if(!dir.exists())
-        dir.mkpath(m_path);
-    m_database.setDatabaseName(m_path + m_database_name);
+    if(!m_path.mkpath("."))
+        qFatal("Failed to create writable directory at %s", qPrintable(m_path.absolutePath()));
+    m_database.setDatabaseName(m_path.absolutePath() + m_database_name);
     if(!m_database.open()) {
         qFatal("No database connection.");
         qDebug() << m_database.lastError().text();
