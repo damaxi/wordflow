@@ -23,7 +23,9 @@ static void createTable()
     }
 }
 
-SqlWordsModel::SqlWordsModel(QObject *parent) : QSqlTableModel(parent)
+SqlWordsModel::SqlWordsModel(QObject *parent) :
+    QSqlTableModel(parent),
+    m_filter()
 {
     createTable();
     setTable(wordsTableName);
@@ -49,6 +51,24 @@ QHash<int, QByteArray> SqlWordsModel::roleNames() const
     names[Qt::UserRole + 3] = "translated";
     names[Qt::UserRole + 4] = "progress";
     return names;
+}
+
+QString SqlWordsModel::originfilter() const
+{
+    return m_filter;
+}
+
+void SqlWordsModel::setOriginfilter(const QString &filter)
+{
+    if (filter == m_filter)
+        return;
+
+    m_filter = filter;
+    const QString filterString = QString::fromLatin1("origin LIKE '%1%'").arg(m_filter);
+    setFilter(filterString);
+    select();
+
+    emit originfilterChanged();
 }
 
 void SqlWordsModel::addWord(const QString &origin, const QString &translated, int vocabulary)

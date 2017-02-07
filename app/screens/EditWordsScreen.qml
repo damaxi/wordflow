@@ -12,7 +12,7 @@ Pane {
     property var wordsArray: []
     function reload() {
         wordsArray = vocabularyImpl.listWords(window.current_vocabulary_id)
-        list.forceActiveFocus() //this is the hack probably something stole focusing
+        list.headerItem.forceActiveFocus() //this is the hack probably something stole focusing
         if (!wordsArray.length) {
             cleanContextPanel()
         }
@@ -26,7 +26,7 @@ Pane {
         translated.text = list.currentItem.translated
     }
     Component.onCompleted: {
-        reload()
+       //reload()
     }
     Component {
         id: wordRow
@@ -102,18 +102,6 @@ Pane {
     }
 
     Component {
-        id: wordHeader
-        RowLayout {
-            width: editWordsScreen.width - 30
-            TextField {
-                placeholderText: qsTr("type word")
-                font { pixelSize: 28; bold: true }
-                Layout.fillWidth: true
-            }
-        }
-    }
-
-    Component {
           id: highlight
           Rectangle {
               width: list.width
@@ -134,7 +122,18 @@ Pane {
     ColumnLayout {
         anchors.fill: parent
         focus: true
-
+        RowLayout {
+            width: editWordsScreen.width - 30
+            TextField {
+                focus: true
+                placeholderText: qsTr("type word")
+                font { pixelSize: 28; bold: true }
+                Layout.fillWidth: true
+                onTextChanged: {
+                    list.model.originfilter = text
+                }
+            }
+        }
         ListView {
             id: list
             property var lastShowedItem: null
@@ -142,7 +141,6 @@ Pane {
             spacing: 5
             height: editWordsScreen.height
             model: WordsModel { }
-            header: wordHeader
             delegate: wordRow
             highlight: highlight
             onCurrentIndexChanged: {
@@ -182,7 +180,7 @@ Pane {
             Button {
                 id: updateButton
                 text: qsTr("Update")
-                enabled: wordsArray.length > 0
+                enabled: list.count > 0
                 checkable: true
                 Layout.fillWidth: true
                 KeyNavigation.tab: origin
@@ -209,7 +207,7 @@ Pane {
             Button {
                 id: resetProgressForAll
                 text: qsTr("Reset All")
-                enabled: wordsArray.length > 0
+                enabled: list.count > 0
                 Layout.fillWidth: true
                 Material.background: "#3faf4d"
                 onClicked: {
@@ -220,7 +218,7 @@ Pane {
             Button {
                 id: deleteAll
                 text: qsTr("Delete All")
-                enabled: wordsArray.length > 0
+                enabled: list.count > 0
                 Layout.fillWidth: true
                 Material.background: "#3faf4d"
                 onClicked: {
