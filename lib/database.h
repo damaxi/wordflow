@@ -18,7 +18,6 @@ public:
     explicit Database(QObject *parent = 0);
     virtual ~Database();
     void openDatabase();
-    Q_INVOKABLE void createDatabase();
     Q_INVOKABLE bool createVocabulary(QString vocabulary, QString description);
     Q_INVOKABLE bool createWord(QString origin, QString translated, int vocabulary_id = 0);
     Q_INVOKABLE bool updateWord(int word_id, QString origin, QString translated);

@@ -36,14 +36,6 @@ void Database::openDatabase()
     }
 }
 
-void Database::createDatabase()
-{
-    m_query.exec("CREATE TABLE IF NOT EXISTS vocabularies "
-                       "(id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                       "vocabulary_name TEXT UNIQUE NOT NULL, "
-                       "vocabulary_description TEXT NOT NULL)");
-}
-
 bool Database::createVocabulary(QString vocabulary, QString description)
 {
         m_query.prepare("INSERT INTO vocabularies (vocabulary_name, vocabulary_description) "

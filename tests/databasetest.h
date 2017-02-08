@@ -10,13 +10,13 @@ class DatabaseTest : public QObject
     Q_OBJECT
 public:
 private slots:
-    void init();
-    void createNewVocabulary();
-    void createNewWorld();
-    void updateProgress();
-    void listWordsForMultipleDistinctWords();
-    void cleanup();
-    void createDatabaseWithInitialConfiguration();
+//    void init();
+//    void createNewVocabulary();
+//    void createNewWorld();
+//    void updateProgress();
+//    void listWordsForMultipleDistinctWords();
+//    void cleanup();
+//    void createDatabaseWithInitialConfiguration();
 private:
     Database m_database;
 };

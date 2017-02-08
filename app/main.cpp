@@ -8,6 +8,9 @@
 #include <QStandardPaths>
 #include "vocabularypresenter.h"
 #include "sqlwordsmodel.h"
+#include "sqlvocabularyquerymodel.h"
+
+#include <QSqlRecord>
 
 int main(int argc, char *argv[])
 {
@@ -17,8 +20,8 @@ int main(int argc, char *argv[])
     if (osType == "macos" || osType == "osx")
         QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
-
     qmlRegisterType<SqlWordsModel>("io.github.damaxi", 1, 0, "WordsModel");
+    qmlRegisterType<SqlVocabularyQueryModel>("io.github.damaxi", 1, 0, "VocabulariesQueryModel");
 //    QSettings settings;
 //    QString style = QQuickStyle::name();
 //    style = "Material";

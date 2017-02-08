@@ -5,30 +5,28 @@ import QtQuick.Layouts 1.1
 import QtQuick.Controls.Material 2.0
 import QtQuick.Controls.Styles 1.4
 import Qt.labs.settings 1.0
+import io.github.damaxi 1.0
 import "controls" as Controls
 import "screens" as Screens
 
 ApplicationWindow {
     id: window
     flags: Qt.Window
-    property var vocabularyList: []
     property int current_vocabulary_id: 0
 
     Component.onCompleted: {
-        vocabularyImpl.createDatabase()
-        if (vocabularyImpl.checkIfVocabularyExist())  {
-            window.vocabularyList = vocabularyImpl.listVocabularies()
-            vocabularyBox.currentIndex = settings.defaultVocabularyId
+        if (vocabularyBox.model.rowCount() > 0)  {
+            vocabularyBox.currentIndex = settings.defaultVocabularyRow
             toolBar.state = ""
         }
         splashScreen.item.state = "StopSplash"
-        if (!vocabularyImpl.checkIfVocabularyExist()) {
+        if (vocabularyBox.model.rowCount() <= 0) {
             configurationPopup.source = "qrc:/controls/ConfigurationPopup.qml"
         }
     }
 
     Component.onDestruction: {
-        settings.defaultVocabularyId = vocabularyBox.currentIndex
+        settings.defaultVocabularyRow = vocabularyBox.currentIndex
     }
 
     visible: true
@@ -38,7 +36,7 @@ ApplicationWindow {
 
     Settings {
         id: settings
-        property int defaultVocabularyId: 0
+        property int defaultVocabularyRow: 0
     }
 
     header: ToolBar {
@@ -81,16 +79,19 @@ ApplicationWindow {
 
         ComboBox {
             id: vocabularyBox
+            function getCurrentId() {
+                return  model.getItemId(currentIndex)
+            }
             width: 200
             height: toolBar.height
-            model: window.vocabularyList
+            model: VocabulariesQueryModel { }
             textRole: "name"
             anchors.right: parent.right
             background: Rectangle {
                 color: "white"
             }
             onCurrentIndexChanged: {
-                window.current_vocabulary_id = window.vocabularyList[vocabularyBox.currentIndex].id
+                window.current_vocabulary_id = getCurrentId()
                 learningScreen.reloadWords()
                 if (typeof stackView.currentItem.reload == 'function') {
                     stackView.currentItem.reload();
@@ -160,7 +161,8 @@ ApplicationWindow {
     Connections {
         target: configurationPopup.item
         onClosed: {
-            window.vocabularyList = vocabularyImpl.listVocabularies()
+            vocabularyBox.model.refresh()
+            vocabularyBox.currentIndex = settings.defaultVocabularyRow
             toolBar.state = ""
             configurationPopup.source = ""
         }
