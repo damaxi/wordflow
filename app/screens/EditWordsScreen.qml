@@ -9,11 +9,10 @@ Pane {
     id: editWordsScreen
     focus: true
     padding: 20
-    property var wordsArray: []
     function reload() {
-        wordsArray = vocabularyImpl.listWords(window.current_vocabulary_id)
-        list.headerItem.forceActiveFocus() //this is the hack probably something stole focusing
-        if (!wordsArray.length) {
+        list.model.vocabularyfilter = window.current_vocabulary_id
+        list.forceActiveFocus() //this is the hack probably something stole focusing
+        if (list.model.rowCount() > 0) {
             cleanContextPanel()
         }
     }
@@ -26,7 +25,7 @@ Pane {
         translated.text = list.currentItem.translated
     }
     Component.onCompleted: {
-       //reload()
+       reload()
     }
     Component {
         id: wordRow
@@ -140,7 +139,7 @@ Pane {
             focus: true
             spacing: 5
             height: editWordsScreen.height
-            model: WordsModel { }
+            model: WordsEditModel { vocabularyfilter: window.current_vocabulary_id }
             delegate: wordRow
             highlight: highlight
             onCurrentIndexChanged: {

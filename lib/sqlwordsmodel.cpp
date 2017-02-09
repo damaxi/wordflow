@@ -25,13 +25,12 @@ static void createTable()
 
 SqlWordsModel::SqlWordsModel(QObject *parent) :
     QSqlTableModel(parent),
-    m_filter()
+    m_vocabularyfiter(-1)
 {
     createTable();
     setTable(wordsTableName);
     setSort(2, Qt::DescendingOrder);
     setEditStrategy(QSqlTableModel::OnManualSubmit);
-    select();
 }
 
 QVariant SqlWordsModel::data(const QModelIndex &index, int role) const
@@ -53,48 +52,20 @@ QHash<int, QByteArray> SqlWordsModel::roleNames() const
     return names;
 }
 
-QString SqlWordsModel::originfilter() const
+int SqlWordsModel::vocabularyfilter() const
 {
-    return m_filter;
+    return m_vocabularyfiter;
 }
 
-void SqlWordsModel::setOriginfilter(const QString &filter)
+void SqlWordsModel::setVocabularyfilter(int vocabularyId)
 {
-    if (filter == m_filter)
+    if (vocabularyId == m_vocabularyfiter)
         return;
 
-    m_filter = filter;
-    const QString filterString = QString::fromLatin1("origin LIKE '%1%'").arg(m_filter);
-    setFilter(filterString);
-    select();
+    m_vocabularyfiter = vocabularyId;
+    mergeFilters();
 
-    emit originfilterChanged();
-}
-
-void SqlWordsModel::addWord(const QString &origin, const QString &translated, int vocabulary)
-{
-    QSqlRecord newRecord = record();
-    newRecord.setValue("vocabulary", vocabulary);
-    newRecord.setValue("origin", origin);
-    newRecord.setValue("translated", translated);
-    newRecord.setValue("progress", QString::number(0));
-    if (!insertRecord(rowCount(), newRecord)) {
-        qWarning() << "Failed to insert word: " << lastError().text();
-        return;
-    }
-    submitAll();
-}
-
-void SqlWordsModel::updateWord(int row, const QString &origin, const QString &translated)
-{
-    QSqlRecord updatedRecord = record(row);
-    updatedRecord.setValue("origin", origin);;
-    updatedRecord.setValue("translated", translated);
-    if (!setRecord(row, updatedRecord)) {
-        qWarning() << "Failed to update word: " << lastError().text();
-        return;
-    }
-    submitAll();
+    emit vocabularyfilterChanged();
 }
 
 void SqlWordsModel::updateProgress(int row, int progress)
@@ -108,31 +79,9 @@ void SqlWordsModel::updateProgress(int row, int progress)
     submitAll();
 }
 
-void SqlWordsModel::removeWord(int row)
+void SqlWordsModel::mergeFilters()
 {
-    if (!removeRows(row, 1)) {
-        qWarning() << "Failed to remove world: " << lastError().text();
-        return;
-    }
-    submitAll();
-}
-
-void SqlWordsModel::removeAll()
-{
-    removeRows(0, rowCount());
-    submitAll();
-}
-
-void SqlWordsModel::resetAll()
-{
-    for (int row = 0; row < rowCount(); ++row)
-    {
-        QSqlRecord updatedRecord = record(row);
-        updatedRecord.setValue("progress", 0);
-        if (!setRecord(row, updatedRecord)) {
-            qWarning() << "Failed to update progress: " << lastError().text();
-            return;
-        }
-    }
-    submitAll();
+    QString filterString =  QString::fromLatin1("vocabulary = %1").arg(m_vocabularyfiter);
+    setFilter(filterString);
+    select();
 }

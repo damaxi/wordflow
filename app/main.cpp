@@ -7,7 +7,7 @@
 #include <QDebug>
 #include <QStandardPaths>
 #include "vocabularypresenter.h"
-#include "sqlwordsmodel.h"
+#include "sqlwordseditmodel.h"
 #include "sqlvocabularyquerymodel.h"
 
 #include <QSqlRecord>
@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     if (osType == "macos" || osType == "osx")
         QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
-    qmlRegisterType<SqlWordsModel>("io.github.damaxi", 1, 0, "WordsModel");
+    qmlRegisterType<SqlWordsEditModel>("io.github.damaxi", 1, 0, "WordsEditModel");
     qmlRegisterType<SqlVocabularyQueryModel>("io.github.damaxi", 1, 0, "VocabulariesQueryModel");
 //    QSettings settings;
 //    QString style = QQuickStyle::name();

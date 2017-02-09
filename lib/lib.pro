@@ -14,12 +14,14 @@ CONFIG += staticlib c++11
 SOURCES += database.cpp \
     sqlerror.cpp \
     sqlwordsmodel.cpp \
-    sqlvocabularyquerymodel.cpp
+    sqlvocabularyquerymodel.cpp \
+    sqlwordseditmodel.cpp
 
 HEADERS += database.h \
     sqlerror.h \
     sqlwordsmodel.h \
-    sqlvocabularyquerymodel.h
+    sqlvocabularyquerymodel.h \
+    sqlwordseditmodel.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

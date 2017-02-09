@@ -6,30 +6,28 @@
 class SqlWordsModel : public QSqlTableModel
 {
     Q_OBJECT
-    Q_PROPERTY(QString originfilter READ originfilter WRITE setOriginfilter NOTIFY originfilterChanged)
+    Q_PROPERTY(int vocabularyfilter READ vocabularyfilter WRITE setVocabularyfilter NOTIFY vocabularyfilterChanged)
 public:
     explicit SqlWordsModel(QObject *parent = 0);
+    virtual ~SqlWordsModel() = default;
 
     QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
     QHash<int, QByteArray> roleNames() const Q_DECL_OVERRIDE;
 
-    QString originfilter() const;
-    void setOriginfilter(const QString &filterString);
+    int vocabularyfilter() const;
+    void setVocabularyfilter(int vocabularyId);
 
-    Q_INVOKABLE void addWord(const QString &origin, const QString &translated, int vocabulary);
-    Q_INVOKABLE void updateWord(int row, const QString &origin, const QString &translated);
     Q_INVOKABLE void updateProgress(int row, int progress);
-    Q_INVOKABLE void removeWord(int row);
-    Q_INVOKABLE void removeAll();
-    Q_INVOKABLE void resetAll();
 
 signals:
-    void originfilterChanged();
+    void vocabularyfilterChanged();
 
 public slots:
 
-private:
-    QString m_filter;
+protected:
+    virtual void mergeFilters();
+
+    int m_vocabularyfiter;
 };
 
 #endif // QSQLWORDSMODEL_H
