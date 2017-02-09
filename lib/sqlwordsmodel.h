@@ -26,6 +26,7 @@ public slots:
 
 protected:
     virtual void mergeFilters();
+    virtual void immediatetelySubmitDefaultProperties();
 
     int m_vocabularyfiter;
 };

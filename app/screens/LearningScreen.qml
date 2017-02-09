@@ -3,55 +3,46 @@ import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Material 2.1
 import QtQuick.Controls.Styles 1.4
+import io.github.damaxi 1.0
 
 Pane {
     id: learnScreen
     property var wordArray: []
     property int index: 0
-    Keys.onLeftPressed: console.log("left")
 
-    function setNewWord() {
-        origin.item.text = wordArray[index].origin;
-        translated.item.hiddenText = wordArray[index].translated;
+    Component.onCompleted: {
+        checkIfListNotEmpty()
     }
 
-    function markWord(progress) {
-        vocabularyImpl.updateProgress(wordArray[index].id, progress)
-        index += 1
-        if (wordArray.length != index) {
-            setNewWord()
-            translated.hideCard()
+    function checkIfListNotEmpty() {
+        if (list.model.rowCount() <= 0) {
+            emptyLabel.words = list.model.countWords()
+            learnScreen.state = "EmptyLabel"
+            return false
+        }
+        learnScreen.state = ""
+        return true
+    }
+
+    function markWord(updateProgressCallback) {
+        if (list.model.rowCount() - 1 != list.currentIndex) {
+            updateProgressCallback();
+            list.incrementCurrentIndex()
         } else {
-            index = 0
-            reloadWords()
+            updateProgressCallback();
+            list.model.submitAll();
+            if (!checkIfListNotEmpty()) return
+            list.currentIndex = 0
         }
     }
 
     function reloadWords() {
-        learnScreen.wordArray = vocabularyImpl.listWords(window.current_vocabulary_id, 10, true, true)
-        translated.hideCard()
-        if (wordArray.length != 0) learnScreen.setNewWord();
-        else emptyLabel.reloadWordNumber()
+        list.model.vocabularyfilter = window.current_vocabulary_id
     }
 
-    function setPrevious() {
-        if (index == 0) {
-            index = wordArray.length - 1;
-        } else {
-            index -= 1;
-        }
-
-        setNewWord();
-    }
-
-    function setNext() {
-        if (index == wordArray.length - 1) {
-            index = 0;
-        } else {
-            index += 1;
-        }
-
-        setNewWord();
+    function refresh() {
+        list.model.select()
+        checkIfListNotEmpty()
     }
 
     Component {
@@ -81,131 +72,139 @@ Pane {
         }
     }
 
-    ColumnLayout {
+    Component {
+        id: learningRowDelegate
 
-        anchors.fill: parent
-        spacing: 0
+        Column {
+            id: delegateItem
+            width: list.width; height: list.height
 
-        Label {
-            id: emptyLabel
-            function reloadWordNumber() {
-                wordCount = vocabularyImpl.countWords(window.current_vocabulary_id)
-            }
-            property int wordCount: vocabularyImpl.countWords(window.current_vocabulary_id)
-            visible: wordArray.length ? false : true
-            anchors.centerIn: parent
-            text: qsTr('Your dictonary is empty. You had learn %1 words.').arg(wordCount)
-            font.pixelSize: 24
-            horizontalAlignment: Qt.AlignHCenter
-            verticalAlignment: Qt.AlignVCenter
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-        }
-
-        Loader {
-            id: origin
-            visible: wordArray.length ? true : false
-            sourceComponent: hoveringButton
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-        }
-
-        Loader {
-            id: translated
-            function showCard() {
-                item.text = item.hiddenText
-                ratingLayout.rateButtonsEnabled = true
-            }
-            function hideCard() {
-                item.text = ""
-                ratingLayout.rateButtonsEnabled = false
-            }
-            visible: wordArray.length ? true : false
-            sourceComponent: hoveringButton
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-        }
-
-        Connections {
-            target: translated.item
-            onClicked: {
-                translated.showCard()
-            }
-        }
-
-        RowLayout {
-            id: ratingLayout
-            property bool rateButtonsEnabled: false
-            spacing: 20
-
-            Button {
-                id: rateAgainButton
-                text: qsTr("Again")
-                enabled:ratingLayout.rateButtonsEnabled
-                visible: wordArray.length ? true : false
-                Material.background: "#36703d"
-                Layout.fillWidth: true
-                checkable: true
-                onCheckedChanged: {
-                        markWord(25)
+            Loader {
+                id: origin
+                sourceComponent: hoveringButton
+                anchors { right: parent.right; left: parent.left }
+                height: delegateItem.height * 4 / 9
+                onLoaded: {
+                    item.text = model.origin
                 }
             }
-            Button {
-                id: rateHardButton
-                text: qsTr("Hard")
-                enabled: ratingLayout.rateButtonsEnabled
-                visible: wordArray.length ? true : false
-                Layout.fillWidth: true
-                Material.background: "#3a8e44"
-                checkable: true
-                onCheckedChanged: {
-                        markWord(50)
+            Loader {
+                id: translated
+                function showCard() {
+                    item.text = item.hiddenText
+                    ratingLayout.rateButtonsEnabled = true
+                }
+                function hideCard() {
+                    item.text = ""
+                    ratingLayout.rateButtonsEnabled = false
+                }
+                sourceComponent: hoveringButton
+                anchors { right: parent.right; left: parent.left }
+                height: delegateItem.height * 4 / 9
+                onLoaded: {
+                    item.hiddenText = model.translated
                 }
             }
-            Button {
-                id: rateGoodButton
-                text: qsTr("Good")
-                enabled: ratingLayout.rateButtonsEnabled
-                visible: wordArray.length ? true : false
-                Layout.fillWidth: true
-                Material.background: "#3faf4d"
-                checkable: true
-                onCheckedChanged: {
-                        markWord(75)
+            Connections {
+                target: translated.item
+                onClicked: {
+                    translated.showCard()
                 }
             }
-            Button {
-                id: rateEasyButton
-                text: qsTr("Easy")
-                enabled: ratingLayout.rateButtonsEnabled
-                visible: wordArray.length ? true : false
-                Layout.fillWidth: true
-                Material.background: "#41cd52"
-                checkable: true
-                onCheckedChanged: {
-                        markWord(100)
+            RowLayout {
+                id: ratingLayout
+                anchors { right: parent.right; left: parent.left }
+                property bool rateButtonsEnabled: false
+                spacing: 20
+
+                Button {
+                    id: rateAgainButton
+                    text: qsTr("Again")
+                    enabled:ratingLayout.rateButtonsEnabled
+                    Material.background: "#36703d"
+                    Layout.fillWidth: true
+                    checkable: true
+                    onCheckedChanged: {
+                        learnScreen.markWord(function() {
+                            list.model.setProgressAgain(list.currentIndex)
+                        })
+                    }
+                }
+                Button {
+                    id: rateHardButton
+                    text: qsTr("Hard")
+                    enabled: ratingLayout.rateButtonsEnabled
+                    Layout.fillWidth: true
+                    Material.background: "#3a8e44"
+                    checkable: true
+                    onCheckedChanged: {
+                        learnScreen.markWord(function() {
+                            list.model.setProgressHard(list.currentIndex)
+                        })
+                    }
+                }
+                Button {
+                    id: rateGoodButton
+                    text: qsTr("Good")
+                    enabled: ratingLayout.rateButtonsEnabled
+                    Layout.fillWidth: true
+                    Material.background: "#3faf4d"
+                    checkable: true
+                    onCheckedChanged: {
+                        learnScreen.markWord(function() {
+                            list.model.setProgressGood(list.currentIndex)
+                        })
+                    }
+                }
+                Button {
+                    id: rateEasyButton
+                    text: qsTr("Easy")
+                    enabled: ratingLayout.rateButtonsEnabled
+                    Layout.fillWidth: true
+                    Material.background: "#41cd52"
+                    checkable: true
+                    onCheckedChanged: {
+                        learnScreen.markWord(function() {
+                            list.model.setProgressEasy(list.currentIndex)
+                        })
+                    }
                 }
             }
         }
-
-//        RowLayout {
-//            id: nextprevLayout
-//            spacing: 20
-//            visible: wordArray.length ? true : false
-
-//            Button {
-//                text: qsTr("Previous")
-//                Layout.minimumWidth: parent.width / 2 - nextprevLayout.spacing
-//                Layout.fillWidth: true
-//                onClicked: learnScreen.setPrevious()
-//            }
-
-//            Button {
-//                text: qsTr("Next")
-//                Layout.minimumWidth: parent.width / 2 - nextprevLayout.spacing
-//                Layout.fillWidth: true
-//                onClicked: learnScreen.setPrevious()
-//            }
-//        }
     }
+
+    Label {
+        id: emptyLabel
+        property int words: 0
+        visible: false
+        anchors.centerIn: parent
+        text: qsTr('Your dictonary is empty. You had learn %1 words.').arg(words)
+        font.pixelSize: 24
+        horizontalAlignment: Qt.AlignHCenter
+        verticalAlignment: Qt.AlignVCenter
+    }
+
+    ListView {
+        id: list
+        anchors.fill: parent
+        currentIndex: 0
+        model: WordsLearningModel { vocabularyfilter: window.current_vocabulary_id }
+        delegate: learningRowDelegate
+        orientation: ListView.Horizontal
+        spacing: 50
+    }
+
+    states: [
+        State {
+            name: "EmptyLabel"
+            PropertyChanges {
+                target: emptyLabel
+                visible: true
+            }
+            PropertyChanges {
+                target: list
+                visible: false
+            }
+        }
+    ]
 }

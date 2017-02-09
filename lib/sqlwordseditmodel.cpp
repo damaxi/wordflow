@@ -9,7 +9,7 @@ SqlWordsEditModel::SqlWordsEditModel(QObject *parent) :
     SqlWordsModel(parent),
     m_originfilter()
 {
-
+    setSort(2, Qt::AscendingOrder);
 }
 
 QString SqlWordsEditModel::originfilter() const

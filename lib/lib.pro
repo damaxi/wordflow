@@ -15,13 +15,15 @@ SOURCES += database.cpp \
     sqlerror.cpp \
     sqlwordsmodel.cpp \
     sqlvocabularyquerymodel.cpp \
-    sqlwordseditmodel.cpp
+    sqlwordseditmodel.cpp \
+    sqllearningwordsmodel.cpp
 
 HEADERS += database.h \
     sqlerror.h \
     sqlwordsmodel.h \
     sqlvocabularyquerymodel.h \
-    sqlwordseditmodel.h
+    sqlwordseditmodel.h \
+    sqllearningwordsmodel.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

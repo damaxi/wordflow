@@ -29,7 +29,6 @@ SqlWordsModel::SqlWordsModel(QObject *parent) :
 {
     createTable();
     setTable(wordsTableName);
-    setSort(2, Qt::DescendingOrder);
     setEditStrategy(QSqlTableModel::OnManualSubmit);
 }
 
@@ -76,7 +75,7 @@ void SqlWordsModel::updateProgress(int row, int progress)
         qWarning() << "Failed to update progress: " << lastError().text();
         return;
     }
-    submitAll();
+    immediatetelySubmitDefaultProperties();
 }
 
 void SqlWordsModel::mergeFilters()
@@ -84,4 +83,9 @@ void SqlWordsModel::mergeFilters()
     QString filterString =  QString::fromLatin1("vocabulary = %1").arg(m_vocabularyfiter);
     setFilter(filterString);
     select();
+}
+
+void SqlWordsModel::immediatetelySubmitDefaultProperties()
+{
+    submitAll();
 }
