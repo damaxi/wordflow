@@ -82,6 +82,10 @@ ApplicationWindow {
             function getCurrentId() {
                 return  model.getItemId(currentIndex)
             }
+            function reload() {
+                model.refresh()
+                if (currentIndex + 1 > model.rowCount()) currentIndex = 0
+            }
             width: 200
             height: toolBar.height
             model: VocabulariesQueryModel { }
@@ -96,9 +100,6 @@ ApplicationWindow {
                 if (typeof stackView.currentItem.reload == 'function') {
                     stackView.currentItem.reload();
                 }
-
-                //console.log("current index: " + settings.defaultVocabularyId)
-                //TODO connect index changing with auto vocabulary learning change
             }
 
             Material.foreground: Material.Green
@@ -176,12 +177,4 @@ ApplicationWindow {
         source: "qrc:/screens/SplashScreen.qml"
         anchors.fill: parent
     }
-
-    //    Drawer {
-    //        id: drawer
-    //        width: Math.min(window.width, window.height) / 3
-    //        height: window.height
-    //        visible: true
-
-    //    }
 }

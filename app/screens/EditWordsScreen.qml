@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.1
 import QtQuick.Controls.Material 2.0
 import QtQuick.Controls.Styles 1.4
 import io.github.damaxi 1.0
+import "../controls" as Controls
 
 Pane {
     id: editWordsScreen
@@ -100,24 +101,6 @@ Pane {
         }
     }
 
-    Component {
-          id: highlight
-          Rectangle {
-              width: list.width
-              height: list.currentItem.height
-              color: "#26a837"
-              opacity: 0.5
-              radius: 5
-              y: list.currentItem.y
-              Behavior on y {
-                  SpringAnimation {
-                      spring: 3
-                      damping: 0.2
-                  }
-              }
-          }
-      }
-
     ColumnLayout {
         anchors.fill: parent
         focus: true
@@ -141,7 +124,7 @@ Pane {
             height: editWordsScreen.height
             model: WordsEditModel { vocabularyfilter: window.current_vocabulary_id }
             delegate: wordRow
-            highlight: highlight
+            highlight: Controls.HighlightComponent { }
             onCurrentIndexChanged: {
                 if (list.lastShowedItem != null) list.lastShowedItem.state = ""
                 contextPanelButtons.uncheckAllAndHide()
@@ -233,7 +216,7 @@ Pane {
             Layout.fillWidth: true
             visible: false
             Label {
-                text: "Origin"
+                text: qsTr("Origin")
                 font.pixelSize: 20
             }
             TextArea {
@@ -245,7 +228,7 @@ Pane {
                 Layout.columnSpan: 2
             }
             Label {
-                text: "Translated"
+                text: qsTr("Translated")
                 font.pixelSize: 20
             }
             TextArea {
@@ -258,7 +241,7 @@ Pane {
             }
             RoundButton {
                 id: saveButton
-                text: "Save"
+                text: qsTr("Save")
                 Layout.fillWidth: true
                 Material.background: Material.Red
                 KeyNavigation.tab: deleteButton

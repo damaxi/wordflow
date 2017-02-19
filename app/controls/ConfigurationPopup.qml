@@ -44,7 +44,7 @@ Popup {
             }
         }
 
-        Screen.AddNewVocabularyScreen {
+        Screen.EditVocabulariesScreen {
             id: vocabularyScreen
         }
 

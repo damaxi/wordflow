@@ -10,6 +10,7 @@
 #include "sqlwordseditmodel.h"
 #include "sqlvocabularyquerymodel.h"
 #include "sqllearningwordsmodel.h"
+#include "sqlvocabularyeditmodel.h"
 
 #include <QSqlRecord>
 
@@ -24,6 +25,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<SqlWordsEditModel>("io.github.damaxi", 1, 0, "WordsEditModel");
     qmlRegisterType<SqlVocabularyQueryModel>("io.github.damaxi", 1, 0, "VocabulariesQueryModel");
     qmlRegisterType<SqlLearningWordsModel>("io.github.damaxi", 1, 0, "WordsLearningModel");
+    qmlRegisterType<SqlVocabularyEditModel>("io.github.damaxi", 1, 0, "VocabulariesEditModel");
 //    QSettings settings;
 //    QString style = QQuickStyle::name();
 //    style = "Material";

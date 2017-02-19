@@ -10,8 +10,9 @@
         <file>controls/ConfigurationPopup.qml</file>
         <file>screens/SplashScreen.qml</file>
         <file>controls/Menu.qml</file>
-        <file>screens/AddNewVocabularyScreen.qml</file>
         <file>controls/StackViewCommonTransition.qml</file>
         <file>screens/EditWordsScreen.qml</file>
+        <file>screens/EditVocabulariesScreen.qml</file>
+        <file>controls/HighlightComponent.qml</file>
     </qresource>
 </RCC>

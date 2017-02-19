@@ -71,14 +71,14 @@ Pane {
             Layout.fillWidth: true
             sourceComponent: menuButton
             onLoaded: {
-                item.text = qsTr("Add vocabulary")
+                item.text = qsTr("Edit vocabularies")
             }
         }
 
         Connections {
             target: addNewVocabulary.item
             onClicked: {
-                showSubMenu("qrc:/screens/AddNewVocabularyScreen.qml")
+                showSubMenu("qrc:/screens/EditVocabulariesScreen.qml")
             }
         }
     }
