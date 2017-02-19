@@ -36,7 +36,7 @@ ApplicationWindow {
 
     Settings {
         id: settings
-        property int defaultVocabularyRow: 0
+        property int defaultVocabularyRow: 1
     }
 
     header: ToolBar {

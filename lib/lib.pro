@@ -18,7 +18,8 @@ SOURCES += database.cpp \
     sqlwordseditmodel.cpp \
     sqllearningwordsmodel.cpp \
     sqlvocabularyeditmodel.cpp \
-    sqlvocabularymodel.cpp
+    sqlvocabularymodel.cpp \
+    localemodel.cpp
 
 HEADERS += database.h \
     sqlerror.h \
@@ -27,7 +28,8 @@ HEADERS += database.h \
     sqlwordseditmodel.h \
     sqllearningwordsmodel.h \
     sqlvocabularyeditmodel.h \
-    sqlvocabularymodel.h
+    sqlvocabularymodel.h \
+    localemodel.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

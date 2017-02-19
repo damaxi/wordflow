@@ -3,6 +3,7 @@ import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls.Material 2.0
+import io.github.damaxi 1.0
 import "../screens" as Screen
 
 Popup {
@@ -44,27 +45,62 @@ Popup {
             }
         }
 
-        Screen.EditVocabulariesScreen {
+        Pane {
             id: vocabularyScreen
-        }
 
-        Connections {
-            target: vocabularyScreen.confirmationButton
-            onClicked: {
-                if (vocabularyScreen.vocabularyInputText.length > 0
-                        && vocabularyScreen.descriptionInputText.length > 0) {
-                    vocabularyImpl.createVocabulary(
-                                vocabularyScreen.vocabularyInputText,
-                                vocabularyScreen.descriptionInputText)
-                    configurationPopup.close()
-                } else {
-                    vocabularyScreen.popup.text = qsTr("One of input is empty!")
-                    vocabularyScreen.popup.visible = true
+            GridLayout {
+                anchors.fill: parent
+                anchors.margins: 50
+                columns: 2; rows: 4
+
+                VocabulariesEditModel {
+                    id: model
+                }
+
+                Label {
+                    text: qsTr("Initialize Vocabulary")
+                    font { pixelSize: 30; bold: true }
+                    Layout.columnSpan: 2
+                    Layout.alignment: Qt.AlignHCenter
+                }
+                Label {
+                    text: qsTr("Vocabulary: ")
+                    font.pixelSize: 20
+                    Layout.rightMargin: 30
+                }
+                ComboBox {
+                    id: vocabularyArea
+                    property alias text: vocabularyArea.currentText
+                    model: LocaleModel { }
+                    textRole: "display"
+                    Layout.fillWidth: true
+                    KeyNavigation.priority: KeyNavigation.BeforeItem
+                    KeyNavigation.tab: descriptionArea
+                }
+                Label {
+                    text: qsTr("Description: ")
+                    font.pixelSize: 20
+                }
+                TextArea {
+                    id: descriptionArea
+                    text: ""
+                    Layout.fillWidth: true
+                    KeyNavigation.priority: KeyNavigation.BeforeItem
+                    KeyNavigation.tab: vocabularyArea
+                }
+                RoundButton {
+                    text: qsTr("Add")
+                    Layout.preferredWidth: contextPanel.buttonWidth
+                    Layout.fillWidth: true
+                    Layout.columnSpan: 2
+                    onClicked: {
+                        model.addVocabulary(vocabularyArea.text, descriptionArea.text)
+                        configurationPopup.close()
+                    }
                 }
             }
         }
     }
-
     PageIndicator {
         id: indicator
 

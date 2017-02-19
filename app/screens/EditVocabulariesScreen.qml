@@ -60,7 +60,7 @@ Pane {
             delegate: vocabularyRow
             highlight: Controls.HighlightComponent { }
             onCurrentItemChanged: {
-                vocabularyArea.text = currentItem.vocabulary
+                vocabularyArea.setText(currentItem.vocabulary)
                 descriptionArea.text = currentItem.description
             }
         }
@@ -89,9 +89,16 @@ Pane {
                 text: qsTr("Vocabulary: ")
                 font.pixelSize: 20
             }
-            TextArea {
+            ComboBox {
                 id: vocabularyArea
-                text: ""
+                function setText(text)
+                {
+                    var index = find(text);
+                    if (index != -1) currentIndex = index
+                }
+                property alias text: vocabularyArea.currentText
+                model: LocaleModel { }
+                textRole: "display"
                 Layout.fillWidth: true
                 Layout.columnSpan: 2
                 KeyNavigation.priority: KeyNavigation.BeforeItem
