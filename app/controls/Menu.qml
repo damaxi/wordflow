@@ -81,5 +81,22 @@ Pane {
                 showSubMenu("qrc:/screens/EditVocabulariesScreen.qml")
             }
         }
+
+        Loader {
+            id: statistics
+            anchors.top: addNewVocabulary.bottom
+            Layout.fillWidth: true
+            sourceComponent: menuButton
+            onLoaded: {
+                item.text = qsTr("Statistics")
+            }
+        }
+
+        Connections {
+            target: statistics.item
+            onClicked: {
+                showSubMenu("qrc:/screens/StatisticScreen.qml")
+            }
+        }
     }
 }

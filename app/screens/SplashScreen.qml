@@ -37,7 +37,7 @@ Pane {
                 SequentialAnimation {
                     NumberAnimation {
                         target: splash
-                        properties: "opacity"; to: 0; duration: 2000
+                        properties: "opacity"; to: 0; duration: 100
                     }
                     PropertyAction {
                         target: splashScreen

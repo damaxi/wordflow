@@ -1,4 +1,4 @@
-#include <QGuiApplication>
+#include <QApplication>
 #include <QSysInfo>
 #include <QQmlApplicationEngine>
 #include <QSettings>
@@ -17,12 +17,12 @@
 
 int main(int argc, char *argv[])
 {
-    QGuiApplication::setApplicationName("Wordflow");
-    QGuiApplication::setOrganizationName("damaxi");
+    QApplication::setApplicationName("Wordflow");
+    QApplication::setOrganizationName("damaxi");
     QString osType = QSysInfo::productType();
     if (osType == "macos" || osType == "osx")
         QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
     qmlRegisterType<SqlWordsEditModel>("io.github.damaxi", 1, 0, "WordsEditModel");
     qmlRegisterType<SqlVocabularyQueryModel>("io.github.damaxi", 1, 0, "VocabulariesQueryModel");
     qmlRegisterType<SqlLearningWordsModel>("io.github.damaxi", 1, 0, "WordsLearningModel");

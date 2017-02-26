@@ -14,5 +14,6 @@
         <file>screens/EditWordsScreen.qml</file>
         <file>screens/EditVocabulariesScreen.qml</file>
         <file>controls/HighlightComponent.qml</file>
+        <file>screens/StatisticScreen.qml</file>
     </qresource>
 </RCC>
