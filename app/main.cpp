@@ -11,6 +11,7 @@
 #include "sqlvocabularyquerymodel.h"
 #include "sqllearningwordsmodel.h"
 #include "sqlvocabularyeditmodel.h"
+#include "statisticchartmodel.h"
 #include "localemodel.h"
 
 #include <QSqlRecord>
@@ -27,6 +28,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<SqlVocabularyQueryModel>("io.github.damaxi", 1, 0, "VocabulariesQueryModel");
     qmlRegisterType<SqlLearningWordsModel>("io.github.damaxi", 1, 0, "WordsLearningModel");
     qmlRegisterType<SqlVocabularyEditModel>("io.github.damaxi", 1, 0, "VocabulariesEditModel");
+    qmlRegisterType<StatisticChartModel>("io.github.damaxi", 1, 0, "StatisticChartModel");
     qmlRegisterType<LocaleModel>("io.github.damaxi", 1, 0, "LocaleModel");
 //    QSettings settings;
 //    QString style = QQuickStyle::name();

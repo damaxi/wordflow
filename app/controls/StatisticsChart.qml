@@ -7,6 +7,11 @@ import QtQuick.Controls.Styles 1.4
 
 ChartView {
     id: chart
+    function toMsecsSinceEpoch(date) {
+        var msecs = date.getTime();
+        return msecs;
+    }
+
     function daysInMonth() {
         var currentDate = new Date()
         var firstDayNextMoth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1)
@@ -75,7 +80,7 @@ ChartView {
             color: "white"
             labelsColor: "white"
             labelsAngle: 45
-            labelsFont.bold: true
+            labelsFont { bold: true; pixelSize: 10 }
             shadesVisible: true
             gridVisible: false
         }
@@ -104,6 +109,8 @@ ChartView {
    }
    AreaSeries {
        id: learnedWordsAxis
+       axisX: dateLoader.item
+       axisY: valueAxis
        name: qsTr("Newly learned")
        upperSeries: LineSeries { }
    }

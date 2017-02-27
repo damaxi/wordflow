@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += sql
+QT       += sql charts
 QT       -= gui
 
 TARGET = lib
@@ -19,7 +19,8 @@ SOURCES += database.cpp \
     sqllearningwordsmodel.cpp \
     sqlvocabularyeditmodel.cpp \
     sqlvocabularymodel.cpp \
-    localemodel.cpp
+    localemodel.cpp \
+    statisticchartmodel.cpp
 
 HEADERS += database.h \
     sqlerror.h \
@@ -29,7 +30,8 @@ HEADERS += database.h \
     sqllearningwordsmodel.h \
     sqlvocabularyeditmodel.h \
     sqlvocabularymodel.h \
-    localemodel.h
+    localemodel.h \
+    statisticchartmodel.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

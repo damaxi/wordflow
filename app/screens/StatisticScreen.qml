@@ -4,13 +4,14 @@ import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Material 2.1
 import QtQuick.Controls.Styles 1.4
+import io.github.damaxi 1.0
 import "../controls" as Controls
 
 Pane {
     id: statisticScreen
-    function toMsecsSinceEpoch(date) {
-        var msecs = date.getTime();
-        return msecs;
+
+    StatisticChartModel {
+        id: chartModel
     }
 
     ColumnLayout {
@@ -39,27 +40,13 @@ Pane {
 
         Controls.StatisticsChart {
             id: statisticChart
-//                allWords: LineSeries {
-//                    XYPoint { x: toMsecsSinceEpoch(new Date(2017, 2, 1)); y: 5 }
-//                    XYPoint { x: toMsecsSinceEpoch(new Date(2017, 2, 2)); y: 50 }
-//                    XYPoint { x: toMsecsSinceEpoch(new Date(2017, 2, 3)); y: 102 }
-//                    XYPoint { x: toMsecsSinceEpoch(new Date(2017, 2, 4)); y: 100 }
-//                    XYPoint { x: toMsecsSinceEpoch(new Date(2017, 2, 5)); y: 110 }
-//                    XYPoint { x: toMsecsSinceEpoch(new Date(2017, 2, 6)); y: 110 }
-//                    XYPoint { x: toMsecsSinceEpoch(new Date(2017, 2, 7)); y: 110 }
-//                }
-//                learnedWords: LineSeries {
-//                   XYPoint { x: toMsecsSinceEpoch(new Date(2017, 2, 1)); y: 1 }
-//                   XYPoint { x: toMsecsSinceEpoch(new Date(2017, 2, 2)); y: 40 }
-//                   XYPoint { x: toMsecsSinceEpoch(new Date(2017, 2, 3)); y: 50 }
-//                   XYPoint { x: toMsecsSinceEpoch(new Date(2017, 2, 4)); y: 50 }
-//                   XYPoint { x: toMsecsSinceEpoch(new Date(2017, 2, 5)); y: 60 }
-//                   XYPoint { x: toMsecsSinceEpoch(new Date(2017, 2, 6)); y: 60 }
-//                   XYPoint { x: toMsecsSinceEpoch(new Date(2017, 2, 7)); y: 110 }
-//                }
-
             Layout.fillWidth: true
             Layout.fillHeight: true
+            Component.onCompleted: {
+                chartModel.setWeekSeries(statisticChart.allWordsSeries)
+                console.log(statisticChart.allWordsSeries.count)
+                statisticChart.update()
+            }
         }
 
         TabBar{
@@ -69,6 +56,7 @@ Pane {
                 text: qsTr("Weekly")
                 onClicked: {
                     statisticChart.changeDateAxis("week")
+                    //chartModel.setWeekSeries(statisticChart.allWordsSeries)
                 }
             }
             TabButton {
