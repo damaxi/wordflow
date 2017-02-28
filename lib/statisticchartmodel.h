@@ -12,7 +12,12 @@ class StatisticChartModel : public QObject
 public:
     explicit StatisticChartModel(QObject *parent = 0);
 
-    Q_INVOKABLE void setWeekSeries(QLineSeries* lineSeries);
+    Q_INVOKABLE void setAllWeekSeries(QLineSeries* lineSeries);
+    Q_INVOKABLE void setAllMonthSeries(QLineSeries* lineSeries);
+    Q_INVOKABLE void setAllYearSeries(QLineSeries* lineSeries);
+    Q_INVOKABLE void setLearnedWeekSeries(QLineSeries* lineSeries);
+    Q_INVOKABLE void setLearnedMonthSeries(QLineSeries* lineSeries);
+    Q_INVOKABLE void setLearnedYearSeries(QLineSeries* lineSeries);
 signals:
 
 public slots:

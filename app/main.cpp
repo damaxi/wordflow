@@ -13,6 +13,7 @@
 #include "sqlvocabularyeditmodel.h"
 #include "statisticchartmodel.h"
 #include "localemodel.h"
+#include "datehelper.h"
 
 #include <QSqlRecord>
 
@@ -30,6 +31,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<SqlVocabularyEditModel>("io.github.damaxi", 1, 0, "VocabulariesEditModel");
     qmlRegisterType<StatisticChartModel>("io.github.damaxi", 1, 0, "StatisticChartModel");
     qmlRegisterType<LocaleModel>("io.github.damaxi", 1, 0, "LocaleModel");
+    qmlRegisterType<DateHelper>("io.github.damaxi", 1, 0, "DateHelper");
 //    QSettings settings;
 //    QString style = QQuickStyle::name();
 //    style = "Material";

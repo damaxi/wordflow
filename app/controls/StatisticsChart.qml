@@ -4,19 +4,27 @@ import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Material 2.1
 import QtQuick.Controls.Styles 1.4
+import io.github.damaxi 1.0
 
 ChartView {
     id: chart
-    function toMsecsSinceEpoch(date) {
-        var msecs = date.getTime();
-        return msecs;
+    function updateAllWordsSeries()
+    {
+        var existingSeries = chart.series(qsTr("All worlds"));
+        if (existingSeries != null) chart.removeSeries(existingSeries);
+        var areaSeries = chart.createSeries(ChartView.SeriesTypeArea, qsTr("All worlds"),
+                dateLoader.item, valueAxis)
+        areaSeries.color = "#41cd52"
+        return areaSeries.upperSeries
     }
 
-    function daysInMonth() {
-        var currentDate = new Date()
-        var firstDayNextMoth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1)
-        var lastDay = new Date(firstDayNextMoth - 1);
-        return lastDay.getDate()
+    function updateLearnedWordsSeries()
+    {
+        var existingSeries = chart.series(qsTr("Newly learned"));
+        if (existingSeries != null) chart.removeSeries(existingSeries);
+        var areaSeries = chart.createSeries(ChartView.SeriesTypeArea, qsTr("Newly learned"),
+                dateLoader.item, valueAxis)
+        return areaSeries.upperSeries
     }
 
     function changeDateAxis(datePeriod) {
@@ -32,9 +40,12 @@ ChartView {
             break;
         }
     }
+
+    DateHelper {
+        id: dateHelper
+    }
+
     property alias dateAxis: dateLoader.sourceComponent
-    property alias allWordsSeries: allWordsAxis.upperSeries
-    property alias learnedWordsSeries: learnedWordsAxis.upperSeries
     property alias  maximumValue: valueAxis.max
     antialiasing: true
     backgroundColor: "transparent"
@@ -49,6 +60,8 @@ ChartView {
         id: weekDateAxis
         DateTimeAxis {
             format: "ddd"
+            max: dateHelper.getCurrentDate()
+            min: dateHelper.getWeekAgoDate()
             tickCount: 7
             color: "white"
             labelsColor: "white"
@@ -62,11 +75,13 @@ ChartView {
     Component {
         id: monthDateAxis
         DateTimeAxis {
+            max: dateHelper.getCurrentDate()
+            min: dateHelper.getMonthAgoDate()
             format: "d"
-            tickCount: chart.daysInMonth()
+            tickCount: dateHelper.getDaysInCurrentMonth()
             color: "white"
             labelsColor: "white"
-            labelsFont { bold: true; pixelSize: 10 }
+            labelsFont { bold: true; pixelSize: 8 }
             shadesVisible: true
             gridVisible: false
         }
@@ -75,6 +90,8 @@ ChartView {
     Component {
         id: annualDateAxis
         DateTimeAxis {
+            max: dateHelper.getCurrentDate()
+            min: dateHelper.getYearAgoDate()
             format: "MMM"
             tickCount: 12
             color: "white"
@@ -98,20 +115,4 @@ ChartView {
         color: "white"
         labelsColor: "white"
     }
-
-    AreaSeries {
-        id: allWordsAxis
-        axisX: dateLoader.item
-        axisY: valueAxis
-        color: "#41cd52"
-        name: qsTr("All worlds")
-        upperSeries: LineSeries { }
-   }
-   AreaSeries {
-       id: learnedWordsAxis
-       axisX: dateLoader.item
-       axisY: valueAxis
-       name: qsTr("Newly learned")
-       upperSeries: LineSeries { }
-   }
 }

@@ -43,9 +43,8 @@ Pane {
             Layout.fillWidth: true
             Layout.fillHeight: true
             Component.onCompleted: {
-                chartModel.setWeekSeries(statisticChart.allWordsSeries)
-                console.log(statisticChart.allWordsSeries.count)
-                statisticChart.update()
+                chartModel.setAllWeekSeries(statisticChart.updateAllWordsSeries())
+                chartModel.setLearnedWeekSeries(statisticChart.updateLearnedWordsSeries())
             }
         }
 
@@ -56,19 +55,27 @@ Pane {
                 text: qsTr("Weekly")
                 onClicked: {
                     statisticChart.changeDateAxis("week")
-                    //chartModel.setWeekSeries(statisticChart.allWordsSeries)
+                    statisticChart.removeAllSeries()
+                    chartModel.setAllWeekSeries(statisticChart.updateAllWordsSeries())
+                    chartModel.setLearnedWeekSeries(statisticChart.updateLearnedWordsSeries())
                 }
             }
             TabButton {
                 text: qsTr("Monthly")
                 onClicked: {
                    statisticChart.changeDateAxis("monthly")
+                    statisticChart.removeAllSeries()
+                    chartModel.setAllMonthSeries(statisticChart.updateAllWordsSeries())
+                    chartModel.setLearnedMonthSeries(statisticChart.updateLearnedWordsSeries())
                 }
             }
             TabButton {
                 text: qsTr("Annul")
                 onClicked: {
                     statisticChart.changeDateAxis("annual")
+                    statisticChart.removeAllSeries()
+                    chartModel.setAllYearSeries(statisticChart.updateAllWordsSeries())
+                    chartModel.setLearnedYearSeries(statisticChart.updateLearnedWordsSeries())
                 }
             }
         }

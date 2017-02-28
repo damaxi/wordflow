@@ -20,7 +20,8 @@ SOURCES += database.cpp \
     sqlvocabularyeditmodel.cpp \
     sqlvocabularymodel.cpp \
     localemodel.cpp \
-    statisticchartmodel.cpp
+    statisticchartmodel.cpp \
+    datehelper.cpp
 
 HEADERS += database.h \
     sqlerror.h \
@@ -31,7 +32,8 @@ HEADERS += database.h \
     sqlvocabularyeditmodel.h \
     sqlvocabularymodel.h \
     localemodel.h \
-    statisticchartmodel.h
+    statisticchartmodel.h \
+    datehelper.h
 unix {
     target.path = /usr/lib
     INSTALLS += target
