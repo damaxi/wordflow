@@ -2,6 +2,7 @@
 #define SQLLEARNINGWORDSMODEL_H
 
 #include "sqlwordsmodel.h"
+#include "sqlstatisticmodel.h"
 
 class SqlLearningWordsModel : public SqlWordsModel
 {
@@ -48,6 +49,7 @@ private:
     bool m_ordersort;
     int m_limit;
     int m_maxprogress;
+    SqlStatisticModel m_statisticsModel;
 };
 
 #endif // SQLLEARNINGWORDSMODEL_H

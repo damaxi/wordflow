@@ -30,7 +30,7 @@ ApplicationWindow {
     }
 
     visible: true
-    minimumWidth: 800
+    minimumWidth: 1000
     minimumHeight: 800
     title: qsTr("WordFlow")
 

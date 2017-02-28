@@ -8,11 +8,13 @@ SqlLearningWordsModel::SqlLearningWordsModel(QObject *parent) :
     SqlWordsModel(parent),
     m_ordersort(true),
     m_limit(10),
-    m_maxprogress(100)
+    m_maxprogress(100),
+    m_statisticsModel()
 {}
 
 void SqlLearningWordsModel::setProgressEasy(int row)
 {
+    m_statisticsModel.updateDailyLearningStatistics(m_vocabularyfiter);
     updateProgress(row, EasyProgress);
 }
 
