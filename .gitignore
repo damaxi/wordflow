@@ -8,3 +8,5 @@ build*/*
 */moc*.cpp
 .DS_Store
 */.DS_Store
+firebaseClient/cmake-build-debug/
+firebaseClient/.idea/
