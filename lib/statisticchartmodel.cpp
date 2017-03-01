@@ -3,7 +3,11 @@
 #include <QDateTime>
 #include <QDebug>
 
-StatisticChartModel::StatisticChartModel(QObject *parent) : QObject(parent)
+StatisticChartModel::StatisticChartModel(QObject *parent) :
+    QObject(parent),
+    m_vocabulary(-1),
+    m_statisticModel(),
+    m_statisticList()
 {
 
 }
@@ -106,4 +110,22 @@ void StatisticChartModel::setLearnedYearSeries(QLineSeries *lineSeries)
     lineSeries->append(xValue.addMonths(-9).toMSecsSinceEpoch(), 100);
     lineSeries->append(xValue.addMonths(-10).toMSecsSinceEpoch(), 10);
     lineSeries->append(xValue.addMonths(-11).toMSecsSinceEpoch(), 40);
+}
+
+int StatisticChartModel::vocabulary() const
+{
+    return m_vocabulary;
+}
+
+void StatisticChartModel::setVocabulary(int vocabulary)
+{
+    if (vocabulary == m_vocabulary)
+        return;
+
+    m_vocabulary = vocabulary;
+    m_statisticList = m_statisticModel.listAllStatistics(m_vocabulary);
+//    for (auto iter = data->begin(); iter != data->end(); ++iter) {
+//        //qDebug() << element.first << " " << element.second;
+//    }
+    emit vocabularyChanged();
 }

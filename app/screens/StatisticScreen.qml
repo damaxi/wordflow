@@ -12,6 +12,7 @@ Pane {
 
     StatisticChartModel {
         id: chartModel
+        vocabulary: window.current_vocabulary_id
     }
 
     ColumnLayout {

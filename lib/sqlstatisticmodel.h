@@ -5,6 +5,9 @@
 #include <QSqlQuery>
 #include <QDate>
 #include <QString>
+#include <QList>
+#include <QPair>
+#include <QDate>
 
 class SqlStatisticModel : public QObject
 {
@@ -15,6 +18,8 @@ public:
     void updateDailyLearningStatistics(int vocabulary);
     void downgradeDailyLearningStatistics(int vocabulary);
     void removeAllVocabularyStatistics(int vocabulary);
+    QList<QPair<QDate, int>> listAllStatistics(int vocabulary);
+
 signals:
 
 public slots:
