@@ -5,6 +5,6 @@
 #include "../include/firebaseclient.h"
 
 
-FirebaseClient::FirebaseClient::FirebaseClient() {
+firebaseclient::FirebaseClient::FirebaseClient() {
 
 }

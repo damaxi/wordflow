@@ -5,7 +5,7 @@
 #ifndef FIREBASECLIENT_FIREBASECLIENT_H
 #define FIREBASECLIENT_FIREBASECLIENT_H
 
-namespace FirebaseClient {
+namespace firebaseclient {
 
     class FirebaseClient{
 
