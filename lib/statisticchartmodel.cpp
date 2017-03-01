@@ -124,8 +124,8 @@ void StatisticChartModel::setVocabulary(int vocabulary)
 
     m_vocabulary = vocabulary;
     m_statisticList = m_statisticModel.listAllStatistics(m_vocabulary);
-//    for (auto iter = data->begin(); iter != data->end(); ++iter) {
-//        //qDebug() << element.first << " " << element.second;
-//    }
+    for (auto iter = m_statisticList.begin(); iter != m_statisticList.end(); ++iter) {
+        qDebug() << iter->first << " " << iter->second;
+    }
     emit vocabularyChanged();
 }
