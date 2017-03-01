@@ -7,7 +7,8 @@
 
 SqlWordsEditModel::SqlWordsEditModel(QObject *parent) :
     SqlWordsModel(parent),
-    m_originfilter()
+    m_originfilter(),
+    m_statisticModel()
 {
     setSort(2, Qt::AscendingOrder);
 }
@@ -54,8 +55,18 @@ void SqlWordsEditModel::updateWord(int row, const QString &origin, const QString
     submitAll();
 }
 
+void SqlWordsEditModel::resetWordProgress(int row)
+{
+    m_statisticModel.downgradeDailyLearningStatistics(m_vocabularyfiter);
+    updateProgress(row, 0);
+}
+
 void SqlWordsEditModel::removeWord(int row)
 {
+    QSqlRecord removedRow = record(row);
+    if (removedRow.value("progress").toInt() > 0) {
+        m_statisticModel.downgradeDailyLearningStatistics(m_vocabularyfiter);
+    }
     if (!removeRows(row, 1)) {
         qWarning() << "Failed to remove world: " << lastError().text();
         return;
@@ -65,6 +76,7 @@ void SqlWordsEditModel::removeWord(int row)
 
 void SqlWordsEditModel::removeAll()
 {
+    m_statisticModel.removeAllVocabularyStatistics(m_vocabularyfiter);
     removeRows(0, rowCount());
     submitAll();
 }

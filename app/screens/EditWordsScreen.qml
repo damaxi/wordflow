@@ -275,7 +275,7 @@ Pane {
                 KeyNavigation.tab: origin
                 Keys.onReturnPressed: clicked()
                 onClicked: {
-                    list.model.updateProgress(list.currentIndex, 0)
+                    list.model.resetWordProgress(list.currentIndex)
                     contextPanelButtons.uncheckAllAndHide()
                 }
             }

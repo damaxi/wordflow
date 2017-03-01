@@ -29,6 +29,10 @@ ApplicationWindow {
         settings.defaultVocabularyRow = vocabularyBox.currentIndex
     }
 
+    onClosing: {
+        learningScreen.mainModel.submitAll()
+    }
+
     visible: true
     minimumWidth: 1000
     minimumHeight: 800

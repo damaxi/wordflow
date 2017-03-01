@@ -113,5 +113,6 @@ void SqlLearningWordsModel::mergeFilters()
 
 void SqlLearningWordsModel::immediatetelySubmitDefaultProperties()
 {
+    // not update immediatly cause it shouldn't be reselected all the time
     // virtual method to disable it
 }

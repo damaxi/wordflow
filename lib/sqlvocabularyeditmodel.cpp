@@ -6,7 +6,8 @@
 #include <QSqlError>
 
 SqlVocabularyEditModel::SqlVocabularyEditModel(QObject *parent) :
-        SqlVocabularyModel2(parent)
+        SqlVocabularyModel2(parent),
+        m_statisticModel()
 {
     setSort(1, Qt::AscendingOrder);
     setEditStrategy(QSqlTableModel::OnRowChange);
@@ -44,6 +45,7 @@ void SqlVocabularyEditModel::deleteVocabulary(int row)
         return;
     }
     int deletedVocabularyId = record(row).value("id").toInt();
+    m_statisticModel.removeAllVocabularyStatistics(deletedVocabularyId);
     if (!removeRows(row, 1)) {
         qWarning() << "Failed to remove vocabulary: " << lastError().text();
         return;

@@ -9,6 +9,7 @@ Pane {
     id: learnScreen
     property var wordArray: []
     property int index: 0
+    property alias mainModel: list.model
 
     Component.onCompleted: {
         checkIfListNotEmpty()

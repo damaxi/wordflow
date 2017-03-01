@@ -2,6 +2,7 @@
 #define SQLWORDSEDITMODEL_H
 
 #include "sqlwordsmodel.h"
+#include "sqlstatisticmodel.h"
 
 class SqlWordsEditModel : public SqlWordsModel
 {
@@ -15,6 +16,7 @@ public:
 
     Q_INVOKABLE void addWord(const QString &origin, const QString &translated, int vocabulary);
     Q_INVOKABLE void updateWord(int row, const QString &origin, const QString &translated);
+    Q_INVOKABLE void resetWordProgress(int row);
     Q_INVOKABLE void removeWord(int row);
     Q_INVOKABLE void removeAll();
     Q_INVOKABLE void resetAll();
@@ -29,6 +31,7 @@ protected:
 
 private:
     QString m_originfilter;
+    SqlStatisticModel m_statisticModel;
 };
 
 #endif // SQLWORDSEDITMODEL_H

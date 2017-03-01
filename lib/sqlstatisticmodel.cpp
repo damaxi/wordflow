@@ -3,6 +3,7 @@
 #include <QSqlError>
 #include <QSqlRecord>
 #include <QDebug>
+#include <limits>
 
 static const char *statisticTableName = "statistics";
 
@@ -29,10 +30,34 @@ SqlStatisticModel::SqlStatisticModel(QObject *parent) :
 
 void SqlStatisticModel::updateDailyLearningStatistics(int vocabulary)
 {
+    int count = getCurrentCount(vocabulary);
+    if (count != std::numeric_limits<int>::lowest()) {
+        updateStatistics(vocabulary, ++count);
+    } else {
+        insertStatistics(vocabulary);
+    }
+}
+
+void SqlStatisticModel::downgradeDailyLearningStatistics(int vocabulary)
+{
+    int count = getCurrentCount(vocabulary);
+    if (count != std::numeric_limits<int>::lowest()) {
+        updateStatistics(vocabulary, --count);
+    } else {
+        insertStatistics(vocabulary, -1);
+    }
+}
+
+QString SqlStatisticModel::currentDate() const
+{
+    return QDate::currentDate().toString(Qt::ISODate);
+}
+
+int SqlStatisticModel::getCurrentCount(int vocabulary)
+{
     QString query = "SELECT count FROM %1 WHERE vocabulary = :vocabulary_id "
-            "AND date LIKE ':current_date'";
+            "AND date LIKE :current_date";
     query = query.arg(statisticTableName);
-    qDebug() << query;
     m_query.prepare(query);
     m_query.bindValue(":vocabulary_id", vocabulary);
     m_query.bindValue(":current_date", currentDate());
@@ -40,32 +65,59 @@ void SqlStatisticModel::updateDailyLearningStatistics(int vocabulary)
         qFatal("Failed to query statistics: %s", qPrintable(m_query.lastError().text()));
     }
     if (m_query.first()) {
-        int count = m_query.value(0).toInt();
-        query = "UPDATE %1 SET count = :count WHERE vocabulary = :vocabulary_id "
-                "AND date LIKE ':current_date'";
-        query = query.arg(statisticTableName);
-        m_query.prepare(query);
-        m_query.bindValue(":count", ++count);
-        m_query.bindValue(":vocabulary_id", vocabulary);
-        m_query.bindValue(":current_date", currentDate());
-        if (!m_query.exec()) {
-            qFatal("Failed to update statistics: %s", qPrintable(m_query.lastError().text()));
-        }
-    } else {
-        query = "INSERT INTO %1 (vocabulary, date, count) VALUES (:vocabulary_id, "
-                ":current_date, :count)";
-        query = query.arg(statisticTableName);
-        m_query.prepare(query);
-        m_query.bindValue(":vocabulary_id", vocabulary);
-        m_query.bindValue(":current_date", currentDate());
-        m_query.bindValue(":count", 1);
-        if (!m_query.exec()) {
-            qFatal("Failed to create statistics: %s", qPrintable(m_query.lastError().text()));
-        }
+        return m_query.value(0).toInt();
+    }
+    return std::numeric_limits<int>::lowest();
+}
+
+void SqlStatisticModel::updateStatistics(int vocabulary, int count)
+{
+    QString query = "UPDATE %1 SET count = :count WHERE vocabulary = :vocabulary_id "
+            "AND date LIKE :current_date";
+    query = query.arg(statisticTableName);
+    m_query.prepare(query);
+    m_query.bindValue(":count", count);
+    m_query.bindValue(":vocabulary_id", vocabulary);
+    m_query.bindValue(":current_date", currentDate());
+    if (!m_query.exec()) {
+        qFatal("Failed to update statistics: %s", qPrintable(m_query.lastError().text()));
     }
 }
 
-QString SqlStatisticModel::currentDate() const
+void SqlStatisticModel::insertStatistics(int vocabulary, int count)
 {
-   return QDate::currentDate().toString(Qt::ISODate);
+    QString query = "INSERT INTO %1 (vocabulary, date, count) VALUES (:vocabulary_id, "
+            ":current_date, :count)";
+    query = query.arg(statisticTableName);
+    m_query.prepare(query);
+    m_query.bindValue(":vocabulary_id", vocabulary);
+    m_query.bindValue(":current_date", currentDate());
+    m_query.bindValue(":count", count);
+    if (!m_query.exec()) {
+        qFatal("Failed to create statistics: %s", qPrintable(m_query.lastError().text()));
+    }
+}
+
+void SqlStatisticModel::removeStatistics(int vocabulary)
+{
+    QString query = "DELETE FROM %1 WHERE vocabulary = :vocabulary_id "
+                    "AND date LIKE :current_date";
+    query = query.arg(statisticTableName);
+    m_query.prepare(query);
+    m_query.bindValue(":vocabulary_id", vocabulary);
+    m_query.bindValue(":current_date", currentDate());
+    if (!m_query.exec()) {
+        qFatal("Failed to create statistics: %s", qPrintable(m_query.lastError().text()));
+    }
+}
+
+void SqlStatisticModel::removeAllVocabularyStatistics(int vocabulary)
+{
+    QString query = "DELETE FROM %1 WHERE vocabulary = :vocabulary_id";
+    query = query.arg(statisticTableName);
+    m_query.prepare(query);
+    m_query.bindValue(":vocabulary_id", vocabulary);
+    if (!m_query.exec()) {
+        qFatal("Failed to create statistics: %s", qPrintable(m_query.lastError().text()));
+    }
 }
