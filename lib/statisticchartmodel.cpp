@@ -2,63 +2,41 @@
 
 #include <QDateTime>
 #include <QtAlgorithms>
+#include <functional>
 #include <QDebug>
 
 StatisticChartModel::StatisticChartModel(QObject *parent) :
     QObject(parent),
     m_vocabulary(-1),
+    m_total(0),
+    m_average(0),
+    m_learned(0),
     m_dateHelper(),
     m_statisticModel(),
-    m_statisticList()
+    m_totalStatisticModel(),
+    m_statisticList(),
+    m_totalStatisticList()
 {}
 
 void StatisticChartModel::setAllWeekSeries(QLineSeries* lineSeries)
 {
-//    QDateTime xValue;
-//    xValue.setDate(QDate::currentDate());
-//    xValue.setTime(QTime(0,0));
-//    lineSeries->append(xValue.toMSecsSinceEpoch(), 100);
-//    lineSeries->append(xValue.addDays(-1).toMSecsSinceEpoch(), 100);
-//    lineSeries->append(xValue.addDays(-2).toMSecsSinceEpoch(), 50);
-//    lineSeries->append(xValue.addDays(-3).toMSecsSinceEpoch(), 10);
-//    lineSeries->append(xValue.addDays(-4).toMSecsSinceEpoch(), 50);
-//    lineSeries->append(xValue.addDays(-5).toMSecsSinceEpoch(), 90);
-//    lineSeries->append(xValue.addDays(-6).toMSecsSinceEpoch(), 110);
+    lineSeries->clear();
+    QDate startDate = m_dateHelper.getWeekAgoDate();
+    generateTotalStatisticChart(m_totalStatisticList, startDate, lineSeries);
 }
 
 void StatisticChartModel::setAllMonthSeries(QLineSeries *lineSeries)
 {
-//    QDateTime xValue;
-//    xValue.setDate(QDate::currentDate());
-//    xValue.setTime(QTime(0,0));
-//    lineSeries->clear();
-//    lineSeries->append(xValue.toMSecsSinceEpoch(), 100);
-//    lineSeries->append(xValue.addDays(-1).toMSecsSinceEpoch(), 100);
-//    lineSeries->append(xValue.addDays(-2).toMSecsSinceEpoch(), 50);
-//    lineSeries->append(xValue.addDays(-3).toMSecsSinceEpoch(), 10);
-//    lineSeries->append(xValue.addDays(-14).toMSecsSinceEpoch(), 50);
-//    lineSeries->append(xValue.addDays(-15).toMSecsSinceEpoch(), 90);
-//    lineSeries->append(xValue.addDays(-28).toMSecsSinceEpoch(), 110);
+    lineSeries->clear();
+    QDate startDate = m_dateHelper.getMonthAgoDate();
+    generateTotalStatisticChart(m_totalStatisticList, startDate, lineSeries);
 }
 
 void StatisticChartModel::setAllYearSeries(QLineSeries *lineSeries)
 {
-//    QDateTime xValue;
-//    xValue.setDate(QDate::currentDate());
-//    xValue.setTime(QTime(0,0));
-//    lineSeries->clear();
-//    lineSeries->append(xValue.toMSecsSinceEpoch(), 100);
-//    lineSeries->append(xValue.addMonths(-1).toMSecsSinceEpoch(), 100);
-//    lineSeries->append(xValue.addMonths(-2).toMSecsSinceEpoch(), 50);
-//    lineSeries->append(xValue.addMonths(-3).toMSecsSinceEpoch(), 10);
-//    lineSeries->append(xValue.addMonths(-4).toMSecsSinceEpoch(), 50);
-//    lineSeries->append(xValue.addMonths(-5).toMSecsSinceEpoch(), 90);
-//    lineSeries->append(xValue.addMonths(-6).toMSecsSinceEpoch(), 110);
-//    lineSeries->append(xValue.addMonths(-7).toMSecsSinceEpoch(), 110);
-//    lineSeries->append(xValue.addMonths(-8).toMSecsSinceEpoch(), 110);
-//    lineSeries->append(xValue.addMonths(-9).toMSecsSinceEpoch(), 110);
-//    lineSeries->append(xValue.addMonths(-10).toMSecsSinceEpoch(), 110);
-//    lineSeries->append(xValue.addMonths(-11).toMSecsSinceEpoch(), 10);
+    lineSeries->clear();
+    QDate startDate = m_dateHelper.getYearAgoDate();
+    generateTotalStatisticChart(m_totalStatisticList, startDate, lineSeries);
 }
 
 void StatisticChartModel::setLearnedWeekSeries(QLineSeries *lineSeries)
@@ -87,6 +65,21 @@ int StatisticChartModel::vocabulary() const
     return m_vocabulary;
 }
 
+int StatisticChartModel::total() const
+{
+    return m_total;
+}
+
+int StatisticChartModel::average() const
+{
+    return m_average;
+}
+
+int StatisticChartModel::learned() const
+{
+    return m_learned;
+}
+
 void StatisticChartModel::setVocabulary(int vocabulary)
 {
     if (vocabulary == m_vocabulary)
@@ -94,11 +87,41 @@ void StatisticChartModel::setVocabulary(int vocabulary)
 
     m_vocabulary = vocabulary;
     m_statisticList = m_statisticModel.listAllStatistics(m_vocabulary);
-    qSort(m_statisticList.begin(), m_statisticList.end(),
+    m_totalStatisticList = m_totalStatisticModel.listAllTotalStatistics(m_vocabulary);
+    std::function<bool(const QPair<QDate, int>&, const QPair<QDate, int>&)> f_compare_dates =
         [](const QPair<QDate, int>& pair1, const QPair<QDate, int>& pair2) -> bool {
             return pair1 < pair2;
-        });
+        };
+    qSort(m_statisticList.begin(), m_statisticList.end(), f_compare_dates);
+    qSort(m_totalStatisticList.begin(), m_totalStatisticList.end(), f_compare_dates);
     emit vocabularyChanged();
+}
+
+void StatisticChartModel::setTotal(int total)
+{
+    if (total == m_total)
+        return;
+
+    m_total = total;
+    emit totalChanged();
+}
+
+void StatisticChartModel::setAverage(int average)
+{
+    if (average == m_average)
+        return;
+
+    m_average = average;
+    emit averageChanged();
+}
+
+void StatisticChartModel::setLearned(int learned)
+{
+    if (learned == m_learned)
+        return;
+
+    m_learned = learned;
+    emit learnedChanged();
 }
 
 void StatisticChartModel::generateStatisticChart(const QList<QPair<QDate, int> > &statisticList, const QDate &startDate, QLineSeries *lineSeries)
@@ -118,6 +141,30 @@ void StatisticChartModel::generateStatisticChart(const QList<QPair<QDate, int> >
                     break;
                 } else if (date == iter->first) {
                     yValue += iter->second;
+                }
+                lineSeries->append(QDateTime(date).toMSecsSinceEpoch(), yValue);
+             }
+         }
+    }
+}
+
+void StatisticChartModel::generateTotalStatisticChart(const QList<QPair<QDate, int> > &statisticList, const QDate &startDate, QLineSeries *lineSeries)
+{
+    QDate tempDate = startDate;
+    int yValue = 0;
+    for (auto iter = statisticList.begin(); iter != statisticList.end(); ++iter) {
+         if (iter->first < startDate) {
+                yValue = iter->second;
+         } else {
+             for (QDate date = tempDate; date <= m_dateHelper.getCurrentDate(); date = date.addDays(1))
+             {
+                if (date == iter->first && iter + 1 != statisticList.end()) {
+                    yValue = iter->second;
+                    tempDate = date;
+                    lineSeries->append(QDateTime(date).toMSecsSinceEpoch(), yValue);
+                    break;
+                } else if (date == iter->first) {
+                    yValue = iter->second;
                 }
                 lineSeries->append(QDateTime(date).toMSecsSinceEpoch(), yValue);
              }

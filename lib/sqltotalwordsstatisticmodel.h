@@ -17,6 +17,7 @@ public:
 
     void updateChange(int vocabulary, int total);
     void deleteAll(int vocabulary);
+    QList<QPair<QDate, int>> listAllTotalStatistics(int vocabulary);
 signals:
 
 public slots:

@@ -132,11 +132,12 @@ QList<QPair<QDate, int>> SqlStatisticModel::listAllStatistics(int vocabulary)
         qFatal("Failed to select statistics: %s", qPrintable(m_query.lastError().text()));
     }
     QList<QPair<QDate, int>> statisticList;
-    while(m_query.next()) {
+    while (m_query.next()) {
         QString dateString = m_query.value(0).toString();
         int count = m_query.value(1).toInt();
         statisticList.append(qMakePair(QDate::fromString(dateString, Qt::ISODate), count));
     }
+
     return statisticList;
 }
 

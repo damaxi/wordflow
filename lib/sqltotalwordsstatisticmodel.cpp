@@ -95,3 +95,22 @@ void SqlTotalWordsStatisticModel::deleteAll(int vocabulary)
         qFatal("Failed to delete total statistics: %s", qPrintable(m_query.lastError().text()));
     }
 }
+
+QList<QPair<QDate, int> > SqlTotalWordsStatisticModel::listAllTotalStatistics(int vocabulary)
+{
+    QString query = "SELECT date, total FROM %1 WHERE vocabulary = :vocabulary_id";
+    query = query.arg(totalStatisticTableName);
+    m_query.prepare(query);
+    m_query.bindValue(":vocabulary_id", vocabulary);
+    if (!m_query.exec()) {
+        qFatal("Failed to select total statistics: %s", qPrintable(m_query.lastError().text()));
+    }
+    QList<QPair<QDate, int>> statisticList;
+    while (m_query.next()) {
+        QString dateString = m_query.value(0).toString();
+        int count = m_query.value(1).toInt();
+        statisticList.append(qMakePair(QDate::fromString(dateString, Qt::ISODate), count));
+    }
+
+    return statisticList;
+}

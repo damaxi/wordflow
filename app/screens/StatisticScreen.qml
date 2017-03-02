@@ -23,17 +23,17 @@ Pane {
             //TODO need to be centered
             spacing: 20
             Label {
-                text: "Total: 20"
+                text: "Total: %1".arg(chartModel.total)
                 font { bold: true; pixelSize: 20 }
                 Layout.fillWidth: true
             }
             Label {
-                text: "Learned: 20"
+                text: "Learned: %1".arg(chartModel.learned)
                 font { bold: true; pixelSize: 20 }
                 Layout.fillWidth: true
             }
             Label {
-                text: "Average: 20"
+                text: "Average: %1".arg(chartModel.average)
                 font { bold: true; pixelSize: 20 }
                 Layout.fillWidth: true
             }
