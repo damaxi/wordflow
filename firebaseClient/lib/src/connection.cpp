@@ -12,6 +12,15 @@ restclient::Connection::Connection() {
     this->curlHandle = curl_easy_init();
 }
 
+restclient::Connection& restclient::Connection::addHeader(std::string& key, std::string& value){
+    headers.emplace(key,value);
+    return *this;
+}
+restclient::Connection& restclient::Connection::addHeader(std::string key, std::string value){
+    headers.emplace(key,value);
+    return *this;
+}
+
 restclient::RestResponse restclient::Connection::get(const std::string &url) {
     return perform(url);
 }
@@ -57,6 +66,20 @@ restclient::RestResponse restclient::Connection::perform(const std::string &url)
 
     return ret;
 }
+
+std::string restclient::Connection::headersToString() const {
+    std::string result;
+
+    for( auto& iter : headers){
+        result += iter.first;
+        result += ":";
+        result += iter.second;
+        result += ",";
+    }
+    return std::move(result);
+}
+
+
 
 
 static size_t write_callback(void *data, size_t size,

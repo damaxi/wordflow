@@ -6,7 +6,7 @@
 TEST_CASE( "[GET] Main http curl Connection", "[connection]"){
     restclient::Connection connection;
     restclient::RestResponse res = connection.get("http://httpbin.org/get");
-    //std::cout << res.body <<std::endl;
     REQUIRE( res.code == 200);
     REQUIRE( res.body.length() > 0);
+    REQUIRE(connection.addHeader("key","value").headersToString().compare("key:value,") == 0);
 }
