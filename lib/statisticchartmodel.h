@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QtCharts/QLineSeries>
 #include "sqlstatisticmodel.h"
+#include "datehelper.h"
 
 QT_CHARTS_USE_NAMESPACE
 
@@ -29,9 +30,15 @@ public slots:
     void setVocabulary(int vocabulary);
 
 private:
+    void generateStatisticChart(const QList<QPair<QDate, int>>& statisticList,
+                                const QDate& startDate,
+                                QLineSeries *lineSeries);
+
     int m_vocabulary;
+    DateHelper m_dateHelper;
     SqlStatisticModel m_statisticModel;
     QList<QPair<QDate, int>> m_statisticList;
+    //TODO add total statistics make cleaning of common statistics elements
 };
 
 #endif // STATISTICCHARTMODEL_H

@@ -250,7 +250,7 @@ Pane {
                     if (updateButton.checked) {
                         list.model.updateWord(list.currentIndex, origin.text, translated.text)
                     } else {
-                        list.model.addWord(origin.text, translated.text, window.current_vocabulary_id)
+                        list.model.addWord(origin.text, translated.text)
                     }
                     contextPanelButtons.uncheckAllAndHide()
                 }

@@ -129,9 +129,9 @@ QList<QPair<QDate, int>> SqlStatisticModel::listAllStatistics(int vocabulary)
     m_query.prepare(query);
     m_query.bindValue(":vocabulary_id", vocabulary);
     if (!m_query.exec()) {
-        qFatal("Failed to create statistics: %s", qPrintable(m_query.lastError().text()));
+        qFatal("Failed to select statistics: %s", qPrintable(m_query.lastError().text()));
     }
-    QList<QPair<QDate, int>> statisticList; // = new QList<QPair<QDate, int>>();
+    QList<QPair<QDate, int>> statisticList;
     while(m_query.next()) {
         QString dateString = m_query.value(0).toString();
         int count = m_query.value(1).toInt();

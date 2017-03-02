@@ -4,6 +4,7 @@
 #include <QSqlTableModel>
 #include "sqlvocabularymodel.h"
 #include "sqlstatisticmodel.h"
+#include "sqltotalwordsstatisticmodel.h"
 
 class SqlVocabularyEditModel : public SqlVocabularyModel2
 {
@@ -17,6 +18,7 @@ public:
 
 private:
     SqlStatisticModel m_statisticModel;
+    SqlTotalWordsStatisticModel m_totalStatisticsModel;
 };
 
 #endif // SQLVOCABULARYEDITMODEL_H

@@ -20,7 +20,7 @@ Pane {
 
         RowLayout {
             Layout.fillWidth: true
-            Layout.leftMargin: 20
+            //TODO need to be centered
             spacing: 20
             Label {
                 text: "Total: 20"

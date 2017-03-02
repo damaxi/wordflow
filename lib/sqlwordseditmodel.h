@@ -3,6 +3,7 @@
 
 #include "sqlwordsmodel.h"
 #include "sqlstatisticmodel.h"
+#include "sqltotalwordsstatisticmodel.h"
 
 class SqlWordsEditModel : public SqlWordsModel
 {
@@ -14,7 +15,7 @@ public:
     QString originfilter() const;
     void setOriginfilter(const QString &filterString);
 
-    Q_INVOKABLE void addWord(const QString &origin, const QString &translated, int vocabulary);
+    Q_INVOKABLE void addWord(const QString &origin, const QString &translated);
     Q_INVOKABLE void updateWord(int row, const QString &origin, const QString &translated);
     Q_INVOKABLE void resetWordProgress(int row);
     Q_INVOKABLE void removeWord(int row);
@@ -32,6 +33,7 @@ protected:
 private:
     QString m_originfilter;
     SqlStatisticModel m_statisticModel;
+    SqlTotalWordsStatisticModel m_totalStatisticModel;
 };
 
 #endif // SQLWORDSEDITMODEL_H

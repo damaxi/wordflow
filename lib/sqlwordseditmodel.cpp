@@ -8,7 +8,8 @@
 SqlWordsEditModel::SqlWordsEditModel(QObject *parent) :
     SqlWordsModel(parent),
     m_originfilter(),
-    m_statisticModel()
+    m_statisticModel(),
+    m_totalStatisticModel()
 {
     setSort(2, Qt::AscendingOrder);
 }
@@ -29,10 +30,10 @@ void SqlWordsEditModel::setOriginfilter(const QString &filter)
     emit originfilterChanged();
 }
 
-void SqlWordsEditModel::addWord(const QString &origin, const QString &translated, int vocabulary)
+void SqlWordsEditModel::addWord(const QString &origin, const QString &translated)
 {
     QSqlRecord newRecord = record();
-    newRecord.setValue("vocabulary", vocabulary);
+    newRecord.setValue("vocabulary", m_vocabularyfiter);
     newRecord.setValue("origin", origin);
     newRecord.setValue("translated", translated);
     newRecord.setValue("progress", QString::number(0));
@@ -41,6 +42,7 @@ void SqlWordsEditModel::addWord(const QString &origin, const QString &translated
         return;
     }
     submitAll();
+    m_totalStatisticModel.updateChange(m_vocabularyfiter, rowCount());
 }
 
 void SqlWordsEditModel::updateWord(int row, const QString &origin, const QString &translated)
@@ -72,10 +74,12 @@ void SqlWordsEditModel::removeWord(int row)
         return;
     }
     submitAll();
+    m_totalStatisticModel.updateChange(m_vocabularyfiter, rowCount());
 }
 
 void SqlWordsEditModel::removeAll()
 {
+    m_totalStatisticModel.deleteAll(m_vocabularyfiter);
     m_statisticModel.removeAllVocabularyStatistics(m_vocabularyfiter);
     removeRows(0, rowCount());
     submitAll();
