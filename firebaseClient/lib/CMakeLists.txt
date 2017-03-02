@@ -11,5 +11,5 @@ ELSE(CURL_FOUND)
     MESSAGE(FATAL_ERROR "Could not find the CURL library and development files.")
 ENDIF(CURL_FOUND)
 
-set(SOURCE_FILES include/firebaseclient.h src/firebaseclient.cpp src/restclient.cpp src/restclient.h)
+set(SOURCE_FILES include/firebaseclient.h src/firebaseclient.cpp src/restclient.cpp src/restclient.h src/connection.cpp src/connection.h)
 add_library(firebaseClient SHARED ${SOURCE_FILES})

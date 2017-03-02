@@ -10,6 +10,7 @@
 namespace  restclient{
     typedef struct {
         int code;
+        std::string body;
     } RestResponse;
 
     class RestClient {
