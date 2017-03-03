@@ -80,7 +80,7 @@ void SqlWordsEditModel::removeWord(int row)
 void SqlWordsEditModel::removeAll()
 {
     m_totalStatisticModel.deleteAll(m_vocabularyfiter);
-    m_statisticModel.removeAllVocabularyStatistics(m_vocabularyfiter);
+    m_statisticModel.deleteAll(m_vocabularyfiter);
     removeRows(0, rowCount());
     submitAll();
 }

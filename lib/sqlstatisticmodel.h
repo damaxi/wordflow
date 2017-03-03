@@ -1,15 +1,15 @@
 #ifndef SQLSTATISTICMODEL_H
 #define SQLSTATISTICMODEL_H
 
-#include <QObject>
 #include <QSqlQuery>
 #include <QDate>
 #include <QString>
 #include <QList>
 #include <QPair>
 #include <QDate>
+#include "sqlstatisticscommon.h"
 
-class SqlStatisticModel : public QObject
+class SqlStatisticModel : public SqlStatisticsCommon
 {
     Q_OBJECT
 public:
@@ -17,21 +17,16 @@ public:
 
     void updateDailyLearningStatistics(int vocabulary);
     void downgradeDailyLearningStatistics(int vocabulary);
-    void removeAllVocabularyStatistics(int vocabulary);
-    QList<QPair<QDate, int>> listAllStatistics(int vocabulary);
 
-signals:
-
-public slots:
+protected:
+    void setListQuery() override;
+    void setDeleteQuery() override;
 
 private:
-    QString currentDate() const;
     int getCurrentCount(int vocabulary);
     void updateStatistics(int vocabulary, int count);
     void insertStatistics(int vocabulary, int count = 1);
-    void removeStatistics(int vocabulary);
-
-    QSqlQuery m_query;
+    void removeStatistics(int vocabulary);   
 };
 
 #endif // SQLSTATISTICMODEL_H

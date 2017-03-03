@@ -22,9 +22,12 @@ static void createTable()
     }
 }
 
-SqlTotalWordsStatisticModel::SqlTotalWordsStatisticModel(QObject *parent) : QObject(parent)
+SqlTotalWordsStatisticModel::SqlTotalWordsStatisticModel(QObject *parent) :
+    SqlStatisticsCommon(parent)
 {
     createTable();
+    setListQuery();
+    setDeleteQuery();
 }
 
 void SqlTotalWordsStatisticModel::updateChange(int vocabulary, int total)
@@ -34,11 +37,6 @@ void SqlTotalWordsStatisticModel::updateChange(int vocabulary, int total)
     } else {
         insert(vocabulary, total);
     }
-}
-
-QString SqlTotalWordsStatisticModel::currentDate() const
-{
-    return QDate::currentDate().toString(Qt::ISODate);
 }
 
 bool SqlTotalWordsStatisticModel::checkExisting(int vocabulary)
@@ -85,32 +83,14 @@ void SqlTotalWordsStatisticModel::insert(int vocabulary, int total)
     }
 }
 
-void SqlTotalWordsStatisticModel::deleteAll(int vocabulary)
-{
-    QString query = "DELETE FROM %1 WHERE vocabulary = :vocabulary_id";
-    query = query.arg(totalStatisticTableName);
-    m_query.prepare(query);
-    m_query.bindValue(":vocabulary_id", vocabulary);
-    if (!m_query.exec()) {
-        qFatal("Failed to delete total statistics: %s", qPrintable(m_query.lastError().text()));
-    }
-}
-
-QList<QPair<QDate, int> > SqlTotalWordsStatisticModel::listAllTotalStatistics(int vocabulary)
+void SqlTotalWordsStatisticModel::setListQuery()
 {
     QString query = "SELECT date, total FROM %1 WHERE vocabulary = :vocabulary_id";
-    query = query.arg(totalStatisticTableName);
-    m_query.prepare(query);
-    m_query.bindValue(":vocabulary_id", vocabulary);
-    if (!m_query.exec()) {
-        qFatal("Failed to select total statistics: %s", qPrintable(m_query.lastError().text()));
-    }
-    QList<QPair<QDate, int>> statisticList;
-    while (m_query.next()) {
-        QString dateString = m_query.value(0).toString();
-        int count = m_query.value(1).toInt();
-        statisticList.append(qMakePair(QDate::fromString(dateString, Qt::ISODate), count));
-    }
+    m_listQuery = query.arg(totalStatisticTableName);
+}
 
-    return statisticList;
+void SqlTotalWordsStatisticModel::setDeleteQuery()
+{
+    QString query = "DELETE FROM %1 WHERE vocabulary = :vocabulary_id";
+    m_deleteQuery = query.arg(totalStatisticTableName);
 }

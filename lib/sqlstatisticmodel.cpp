@@ -23,9 +23,11 @@ static void createTable()
 }
 
 SqlStatisticModel::SqlStatisticModel(QObject *parent) :
-    QObject(parent)
+    SqlStatisticsCommon(parent)
 {
     createTable();
+    setListQuery();
+    setDeleteQuery();
 }
 
 void SqlStatisticModel::updateDailyLearningStatistics(int vocabulary)
@@ -46,11 +48,6 @@ void SqlStatisticModel::downgradeDailyLearningStatistics(int vocabulary)
     } else {
         insertStatistics(vocabulary, -1);
     }
-}
-
-QString SqlStatisticModel::currentDate() const
-{
-    return QDate::currentDate().toString(Qt::ISODate);
 }
 
 int SqlStatisticModel::getCurrentCount(int vocabulary)
@@ -111,33 +108,14 @@ void SqlStatisticModel::removeStatistics(int vocabulary)
     }
 }
 
-void SqlStatisticModel::removeAllVocabularyStatistics(int vocabulary)
-{
-    QString query = "DELETE FROM %1 WHERE vocabulary = :vocabulary_id";
-    query = query.arg(statisticTableName);
-    m_query.prepare(query);
-    m_query.bindValue(":vocabulary_id", vocabulary);
-    if (!m_query.exec()) {
-        qFatal("Failed to create statistics: %s", qPrintable(m_query.lastError().text()));
-    }
-}
-
-QList<QPair<QDate, int>> SqlStatisticModel::listAllStatistics(int vocabulary)
+void SqlStatisticModel::setListQuery()
 {
     QString query = "SELECT date, count FROM %1 WHERE vocabulary = :vocabulary_id";
-    query = query.arg(statisticTableName);
-    m_query.prepare(query);
-    m_query.bindValue(":vocabulary_id", vocabulary);
-    if (!m_query.exec()) {
-        qFatal("Failed to select statistics: %s", qPrintable(m_query.lastError().text()));
-    }
-    QList<QPair<QDate, int>> statisticList;
-    while (m_query.next()) {
-        QString dateString = m_query.value(0).toString();
-        int count = m_query.value(1).toInt();
-        statisticList.append(qMakePair(QDate::fromString(dateString, Qt::ISODate), count));
-    }
-
-    return statisticList;
+    m_listQuery = query.arg(statisticTableName);
 }
 
+void SqlStatisticModel::setDeleteQuery()
+{
+    QString query = "DELETE FROM %1 WHERE vocabulary = :vocabulary_id";
+    m_deleteQuery = query.arg(statisticTableName);
+}

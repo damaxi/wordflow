@@ -23,7 +23,8 @@ SOURCES += database.cpp \
     statisticchartmodel.cpp \
     datehelper.cpp \
     sqlstatisticmodel.cpp \
-    sqltotalwordsstatisticmodel.cpp
+    sqltotalwordsstatisticmodel.cpp \
+    sqlstatisticscommon.cpp
 
 HEADERS += database.h \
     sqlerror.h \
@@ -37,7 +38,8 @@ HEADERS += database.h \
     statisticchartmodel.h \
     datehelper.h \
     sqlstatisticmodel.h \
-    sqltotalwordsstatisticmodel.h
+    sqltotalwordsstatisticmodel.h \
+    sqlstatisticscommon.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

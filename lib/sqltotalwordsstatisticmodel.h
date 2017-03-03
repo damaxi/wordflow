@@ -1,34 +1,30 @@
 #ifndef SQLTOTALWORDSSTATISTICMODEL_H
 #define SQLTOTALWORDSSTATISTICMODEL_H
 
-#include <QObject>
 #include <QSqlQuery>
 #include <QDate>
 #include <QString>
 #include <QList>
 #include <QPair>
 #include <QDate>
+#include "sqlstatisticscommon.h"
 
-class SqlTotalWordsStatisticModel : public QObject
+class SqlTotalWordsStatisticModel : public SqlStatisticsCommon
 {
     Q_OBJECT
 public:
     explicit SqlTotalWordsStatisticModel(QObject *parent = 0);
 
     void updateChange(int vocabulary, int total);
-    void deleteAll(int vocabulary);
-    QList<QPair<QDate, int>> listAllTotalStatistics(int vocabulary);
-signals:
 
-public slots:
+protected:
+    void setListQuery() override;
+    void setDeleteQuery() override;
 
 private:
-    QString currentDate() const;
     bool checkExisting(int vocabulary);
     void update(int vocabulary, int total);
     void insert(int vocabulary, int total);
-
-    QSqlQuery m_query;
 };
 
 #endif // SQLTOTALWORDSSTATISTICMODEL_H

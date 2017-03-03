@@ -46,7 +46,7 @@ void SqlVocabularyEditModel::deleteVocabulary(int row)
         return;
     }
     int deletedVocabularyId = record(row).value("id").toInt();
-    m_statisticModel.removeAllVocabularyStatistics(deletedVocabularyId);
+    m_statisticModel.deleteAll(deletedVocabularyId);
     m_totalStatisticsModel.deleteAll(deletedVocabularyId);
     if (!removeRows(row, 1)) {
         qWarning() << "Failed to remove vocabulary: " << lastError().text();

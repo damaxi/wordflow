@@ -95,8 +95,8 @@ void StatisticChartModel::setVocabulary(int vocabulary)
         return;
 
     m_vocabulary = vocabulary;
-    m_statisticList = m_statisticModel.listAllStatistics(m_vocabulary);
-    m_totalStatisticList = m_totalStatisticModel.listAllTotalStatistics(m_vocabulary);
+    m_statisticList = m_statisticModel.listAll(m_vocabulary);
+    m_totalStatisticList = m_totalStatisticModel.listAll(m_vocabulary);
     std::function<bool(const QPair<QDate, int>&, const QPair<QDate, int>&)> f_compare_dates =
         [](const QPair<QDate, int>& pair1, const QPair<QDate, int>& pair2) -> bool {
             return pair1 < pair2;
