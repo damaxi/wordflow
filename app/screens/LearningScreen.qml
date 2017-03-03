@@ -21,7 +21,7 @@ Pane {
             learnScreen.state = "EmptyLabel"
             return false
         }
-        learnScreen.state = ""
+        learnScreen.state = "Default"
         return true
     }
 
@@ -206,6 +206,17 @@ Pane {
             PropertyChanges {
                 target: list
                 visible: false
+            }
+        },
+        State {
+            name: "Default"
+            PropertyChanges {
+                target: emptyLabel
+                visible: false
+            }
+            PropertyChanges {
+                target: list
+                visible: true
             }
         }
     ]
