@@ -9,6 +9,7 @@
 
 QT_CHARTS_USE_NAMESPACE
 
+
 class StatisticChartModel : public QObject
 {
     Q_OBJECT
@@ -17,8 +18,16 @@ class StatisticChartModel : public QObject
     Q_PROPERTY(int average READ average WRITE setAverage NOTIFY averageChanged)
     Q_PROPERTY(int learned READ learned WRITE setLearned NOTIFY learnedChanged)
     Q_PROPERTY(int maxValue READ maxValue WRITE setMaxValue NOTIFY maxValueChanged)
+    Q_ENUMS(ChartType)
 public:
     explicit StatisticChartModel(QObject *parent = 0);
+
+    enum class ChartType
+    {
+        WEEKLY,
+        MONTHLY,
+        ANNUAL
+    };
 
     Q_INVOKABLE void setAllWeekSeries(QLineSeries* lineSeries);
     Q_INVOKABLE void setAllMonthSeries(QLineSeries* lineSeries);

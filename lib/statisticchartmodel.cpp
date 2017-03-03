@@ -106,8 +106,15 @@ void StatisticChartModel::setVocabulary(int vocabulary)
     if (!m_totalStatisticList.empty()) {
         findMaxElement();
         setTotal(m_totalStatisticList.last().second);
+    } else {
+        setTotal(0);
     }
     if (!m_statisticList.empty()) calculateAverage();
+    else {
+        setAverage(0);
+        setLearned(0);
+    }
+
     emit vocabularyChanged();
 }
 

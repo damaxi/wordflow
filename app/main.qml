@@ -100,7 +100,6 @@ ApplicationWindow {
             }
             onCurrentIndexChanged: {
                 window.current_vocabulary_id = getCurrentId()
-                learningScreen.reloadWords()
                 if (typeof stackView.currentItem.reload == 'function') {
                     stackView.currentItem.reload();
                 }

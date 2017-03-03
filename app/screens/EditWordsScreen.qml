@@ -11,7 +11,6 @@ Pane {
     focus: true
     padding: 20
     function reload() {
-        list.model.vocabularyfilter = window.current_vocabulary_id
         list.forceActiveFocus() //this is the hack probably something stole focusing
         if (list.model.rowCount() > 0) {
             cleanContextPanel()

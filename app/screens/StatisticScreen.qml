@@ -9,10 +9,34 @@ import "../controls" as Controls
 
 Pane {
     id: statisticScreen
+    function loadStatistics(type) {
+        chartModel.type = type;
+        switch(type) {
+            case StatisticChartModel.WEEKLY:
+                statisticChart.changeDateAxis("week")
+                chartModel.setAllWeekSeries(statisticChart.updateAllWordsSeries())
+                chartModel.setLearnedWeekSeries(statisticChart.updateLearnedWordsSeries())
+            break;
+            case StatisticChartModel.MONTHLY:
+                statisticChart.changeDateAxis("monthly")
+                chartModel.setAllMonthSeries(statisticChart.updateAllWordsSeries())
+                chartModel.setLearnedMonthSeries(statisticChart.updateLearnedWordsSeries())
+            break;
+            case StatisticChartModel.ANNUAL:
+                statisticChart.changeDateAxis("annual")
+                chartModel.setAllYearSeries(statisticChart.updateAllWordsSeries())
+                chartModel.setLearnedYearSeries(statisticChart.updateLearnedWordsSeries())
+            break;
+        }
+    }
 
     StatisticChartModel {
         id: chartModel
+        property int type: StatisticChartModel.WEEKLY
         vocabulary: window.current_vocabulary_id
+        onVocabularyChanged: {
+            loadStatistics(type)
+        }
     }
 
     ColumnLayout {
@@ -47,8 +71,7 @@ Pane {
             Layout.fillHeight: true
             maximumValue: chartModel.maxValue
             Component.onCompleted: {
-                chartModel.setAllWeekSeries(statisticChart.updateAllWordsSeries())
-                chartModel.setLearnedWeekSeries(statisticChart.updateLearnedWordsSeries())
+                loadStatistics(StatisticChartModel.WEEKLY)
             }
         }
 
@@ -56,30 +79,24 @@ Pane {
             id: bar
             Layout.fillWidth: true
             TabButton {
+                id: weekly
                 text: qsTr("Weekly")
                 onClicked: {
-                    statisticChart.changeDateAxis("week")
-                    statisticChart.removeAllSeries()
-                    chartModel.setAllWeekSeries(statisticChart.updateAllWordsSeries())
-                    chartModel.setLearnedWeekSeries(statisticChart.updateLearnedWordsSeries())
+                    loadStatistics(StatisticChartModel.WEEKLY)
                 }
             }
             TabButton {
+                id: monthly
                 text: qsTr("Monthly")
                 onClicked: {
-                   statisticChart.changeDateAxis("monthly")
-                    statisticChart.removeAllSeries()
-                    chartModel.setAllMonthSeries(statisticChart.updateAllWordsSeries())
-                    chartModel.setLearnedMonthSeries(statisticChart.updateLearnedWordsSeries())
+                    loadStatistics(StatisticChartModel.MONTHLY)
                 }
             }
             TabButton {
-                text: qsTr("Annul")
+                id: annual
+                text: qsTr("Annual")
                 onClicked: {
-                    statisticChart.changeDateAxis("annual")
-                    statisticChart.removeAllSeries()
-                    chartModel.setAllYearSeries(statisticChart.updateAllWordsSeries())
-                    chartModel.setLearnedYearSeries(statisticChart.updateLearnedWordsSeries())
+                    loadStatistics(StatisticChartModel.ANNUAL)
                 }
             }
         }

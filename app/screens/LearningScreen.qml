@@ -37,10 +37,6 @@ Pane {
         }
     }
 
-    function reloadWords() {
-        list.model.vocabularyfilter = window.current_vocabulary_id
-    }
-
     function refresh() {
         list.model.select()
         checkIfListNotEmpty()
@@ -189,7 +185,12 @@ Pane {
         id: list
         anchors.fill: parent
         currentIndex: 0
-        model: WordsLearningModel { vocabularyfilter: window.current_vocabulary_id }
+        model: WordsLearningModel {
+            vocabularyfilter: window.current_vocabulary_id;
+            onVocabularyfilterChanged: {
+                checkIfListNotEmpty();
+            }
+        }
         delegate: learningRowDelegate
         orientation: ListView.Horizontal
         spacing: 50
