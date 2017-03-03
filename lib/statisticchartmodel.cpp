@@ -3,6 +3,8 @@
 #include <QDateTime>
 #include <QtAlgorithms>
 #include <functional>
+#include <algorithm>
+#include <numeric>
 #include <QDebug>
 
 StatisticChartModel::StatisticChartModel(QObject *parent) :
@@ -11,6 +13,8 @@ StatisticChartModel::StatisticChartModel(QObject *parent) :
     m_total(0),
     m_average(0),
     m_learned(0),
+    m_maxValue(150),
+    MAX_VALUE_ADDER(20),
     m_dateHelper(),
     m_statisticModel(),
     m_totalStatisticModel(),
@@ -80,6 +84,11 @@ int StatisticChartModel::learned() const
     return m_learned;
 }
 
+int StatisticChartModel::maxValue() const
+{
+    return m_maxValue;
+}
+
 void StatisticChartModel::setVocabulary(int vocabulary)
 {
     if (vocabulary == m_vocabulary)
@@ -94,6 +103,11 @@ void StatisticChartModel::setVocabulary(int vocabulary)
         };
     qSort(m_statisticList.begin(), m_statisticList.end(), f_compare_dates);
     qSort(m_totalStatisticList.begin(), m_totalStatisticList.end(), f_compare_dates);
+    if (!m_totalStatisticList.empty()) {
+        findMaxElement();
+        setTotal(m_totalStatisticList.last().second);
+    }
+    if (!m_statisticList.empty()) calculateAverage();
     emit vocabularyChanged();
 }
 
@@ -124,6 +138,16 @@ void StatisticChartModel::setLearned(int learned)
     emit learnedChanged();
 }
 
+void StatisticChartModel::setMaxValue(int max)
+{
+    if (max == m_maxValue)
+        return;
+
+    m_maxValue = max;
+    m_maxValue += MAX_VALUE_ADDER;
+    emit maxValueChanged();
+}
+
 void StatisticChartModel::generateStatisticChart(const QList<QPair<QDate, int> > &statisticList, const QDate &startDate, QLineSeries *lineSeries)
 {
     QDate tempDate = startDate;
@@ -148,7 +172,8 @@ void StatisticChartModel::generateStatisticChart(const QList<QPair<QDate, int> >
     }
 }
 
-void StatisticChartModel::generateTotalStatisticChart(const QList<QPair<QDate, int> > &statisticList, const QDate &startDate, QLineSeries *lineSeries)
+void StatisticChartModel::generateTotalStatisticChart(const QList<QPair<QDate, int> > &statisticList,
+                                                      const QDate &startDate, QLineSeries *lineSeries)
 {
     QDate tempDate = startDate;
     int yValue = 0;
@@ -170,4 +195,24 @@ void StatisticChartModel::generateTotalStatisticChart(const QList<QPair<QDate, i
              }
          }
     }
+}
+
+void StatisticChartModel::findMaxElement()
+{
+    QList<QPair<QDate, int>>::const_iterator maxValue = std::max(m_totalStatisticList.begin(), m_totalStatisticList.end(),
+                                    [](QList<QPair<QDate, int>>::const_iterator iter1,
+                                       QList<QPair<QDate, int>>::const_iterator iter2) -> bool {
+        return iter1->second < iter2->second;
+    });
+    setMaxValue(maxValue->second);
+}
+
+void StatisticChartModel::calculateAverage()
+{
+    int acc = std::accumulate(m_statisticList.begin(), m_statisticList.end(), 0,
+                    [](int a, QPair<QDate, int>& b) {
+       return a + b.second;
+    });
+    setAverage(acc / m_statisticList.count());
+    setLearned(acc);
 }

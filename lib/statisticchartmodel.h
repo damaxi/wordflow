@@ -16,6 +16,7 @@ class StatisticChartModel : public QObject
     Q_PROPERTY(int total READ total WRITE setTotal NOTIFY totalChanged)
     Q_PROPERTY(int average READ average WRITE setAverage NOTIFY averageChanged)
     Q_PROPERTY(int learned READ learned WRITE setLearned NOTIFY learnedChanged)
+    Q_PROPERTY(int maxValue READ maxValue WRITE setMaxValue NOTIFY maxValueChanged)
 public:
     explicit StatisticChartModel(QObject *parent = 0);
 
@@ -30,17 +31,20 @@ public:
     int total() const;
     int average() const;
     int learned() const;
+    int maxValue() const;
 signals:
     void vocabularyChanged();
     void totalChanged();
     void averageChanged();
     void learnedChanged();
+    void maxValueChanged();
 
 public slots:
     void setVocabulary(int vocabulary);
     void setTotal(int total);
     void setAverage(int average);
     void setLearned(int learned);
+    void setMaxValue(int max);
 
 private:
     void generateStatisticChart(const QList<QPair<QDate, int>>& statisticList,
@@ -51,10 +55,15 @@ private:
                                 const QDate& startDate,
                                 QLineSeries *lineSeries);
 
+    void findMaxElement();
+    void calculateAverage();
+
     int m_vocabulary;
     int m_total;
     int m_average;
     int m_learned;
+    int m_maxValue;
+    const int MAX_VALUE_ADDER;
     DateHelper m_dateHelper;
     SqlStatisticModel m_statisticModel;
     SqlTotalWordsStatisticModel m_totalStatisticModel;

@@ -20,21 +20,23 @@ Pane {
 
         RowLayout {
             Layout.fillWidth: true
-            //TODO need to be centered
             spacing: 20
             Label {
                 text: "Total: %1".arg(chartModel.total)
                 font { bold: true; pixelSize: 20 }
+                horizontalAlignment: Qt.AlignRight
                 Layout.fillWidth: true
             }
             Label {
                 text: "Learned: %1".arg(chartModel.learned)
                 font { bold: true; pixelSize: 20 }
+                horizontalAlignment: Qt.AlignHCenter
                 Layout.fillWidth: true
             }
             Label {
                 text: "Average: %1".arg(chartModel.average)
                 font { bold: true; pixelSize: 20 }
+                horizontalAlignment: Qt.AlignLeft
                 Layout.fillWidth: true
             }
         }
@@ -43,6 +45,7 @@ Pane {
             id: statisticChart
             Layout.fillWidth: true
             Layout.fillHeight: true
+            maximumValue: chartModel.maxValue
             Component.onCompleted: {
                 chartModel.setAllWeekSeries(statisticChart.updateAllWordsSeries())
                 chartModel.setLearnedWeekSeries(statisticChart.updateLearnedWordsSeries())
