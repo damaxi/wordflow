@@ -16,5 +16,7 @@
         <file>controls/HighlightComponent.qml</file>
         <file>screens/StatisticScreen.qml</file>
         <file>controls/StatisticsChart.qml</file>
+        <file>images/dictionary@2x.png</file>
+        <file>images/dictionary.png</file>
     </qresource>
 </RCC>

@@ -6,6 +6,11 @@
 #include <QQuickStyle>
 #include <QDebug>
 #include <QStandardPaths>
+#include <QSystemTrayIcon>
+#include <QMessageBox>
+#include <QAction>
+#include <QMenu>
+#include <QQuickWindow>
 #include "vocabularypresenter.h"
 #include "sqlwordseditmodel.h"
 #include "sqlvocabularyquerymodel.h"
@@ -24,7 +29,16 @@ int main(int argc, char *argv[])
     QString osType = QSysInfo::productType();
     if (osType == "macos" || osType == "osx")
         QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+
     QApplication app(argc, argv);
+
+    if (!QSystemTrayIcon::isSystemTrayAvailable()) {
+        QMessageBox::critical(0, QObject::tr("Systray"),
+                              QObject::tr("Couldn't detect any system tray"));
+        return 1;
+    }
+    QApplication::setQuitOnLastWindowClosed(false);
+
     qmlRegisterType<SqlWordsEditModel>("io.github.damaxi", 1, 0, "WordsEditModel");
     qmlRegisterType<SqlVocabularyQueryModel>("io.github.damaxi", 1, 0, "VocabulariesQueryModel");
     qmlRegisterType<SqlLearningWordsModel>("io.github.damaxi", 1, 0, "WordsLearningModel");
@@ -44,8 +58,39 @@ int main(int argc, char *argv[])
     VocabularyPresenter vocabulary;
     engine.rootContext()->setContextProperty("vocabularyImpl", &vocabulary);
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));
+
+    QObject *root = nullptr;
     if (engine.rootObjects().isEmpty())
         return -1;
+    else
+    {
+        root = engine.rootObjects().first();
+        QQuickWindow *qmlWindow = qobject_cast<QQuickWindow*>(root);
+
+        QAction *minimizeAction = new QAction(QObject::tr("Mi&nimize"), qmlWindow);
+        root->connect(minimizeAction, &QAction::triggered, qmlWindow, &QQuickWindow::hide);
+        QAction *maximizeAction = new QAction(QObject::tr("Ma&ximize"), qmlWindow);
+        root->connect(maximizeAction, &QAction::triggered, qmlWindow, &QQuickWindow::showMaximized);
+        QAction *restoreAction = new QAction(QObject::tr("&Restore"), qmlWindow);
+        root->connect(restoreAction, &QAction::triggered, qmlWindow, &QQuickWindow::showNormal);
+        QAction *quitAction = new QAction(QObject::tr("&Quit"), qmlWindow);
+        root->connect(quitAction, &QAction::triggered, qApp, &QApplication::quit);
+
+        QMenu *trayIconMenu = new QMenu();
+        trayIconMenu->addAction(minimizeAction);
+        trayIconMenu->addAction(maximizeAction);
+        trayIconMenu->addAction(restoreAction);
+        trayIconMenu->addSeparator();
+        trayIconMenu->addAction(quitAction);
+
+        QSystemTrayIcon *trayIcon = new QSystemTrayIcon(root);
+        trayIcon->setContextMenu(trayIconMenu);
+        trayIcon->setIcon(QIcon(":/images/dictionary.png"));
+        trayIcon->show();
+
+        qmlWindow->setIcon(QIcon(":/images/dictionary.png"));
+    }
+
 
     return app.exec();
 }
