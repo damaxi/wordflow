@@ -23,3 +23,6 @@ script:
 
 notifications:
   email: false
+  slack:
+    rooms:
+      - workflow-dictonary:3jLsjpRJOEm9BnWBg4Q8gINr#planning
