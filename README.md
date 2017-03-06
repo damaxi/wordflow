@@ -1,4 +1,5 @@
 # WordFlow
+[![Build Status](https://travis-ci.org/damaxi/wordflow.svg?branch=master)](https://travis-ci.org/damaxi/wordflow)
 
 A new vocabulary application.
 
