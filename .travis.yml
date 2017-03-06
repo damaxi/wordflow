@@ -13,7 +13,6 @@ install:
   - sudo apt-get install qt58quickcontrols2 
   - sudo apt-get install qt58location 
   - sudo apt-get install qt58declarative 
-  - sudo apt-get install qt58-meta
   - source /opt/qt58/bin/qt58-env.sh
 
 script:
