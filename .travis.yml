@@ -14,7 +14,7 @@ install:
 script:
   - mkdir build
   - cd build
-  - qmake .. & make
+  - qmake .. && make
 
 notifications:
   email: false
