@@ -23,6 +23,9 @@ script:
 
 notifications:
   email: false
-  slack:
-    rooms:
-      - workflow-dictonary:3jLsjpRJOEm9BnWBg4Q8gINr#planning
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/bfdf77026eb0b6eef83b
+    on_success: change
+    on_failure: always
+    on_start: never
