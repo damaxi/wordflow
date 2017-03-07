@@ -30,3 +30,12 @@ else:unix: PRE_TARGETDEPS += $$OUT_PWD/../lib/liblib.a
 
 HEADERS += \
     vocabularypresenter.h
+
+TARGET = wordflow
+
+target.path = /usr/local/bin
+desktop.path = /usr/share/applications
+desktop.files += wordflow.desktop
+icons.path = /usr/share/icons/hicolor/48x48/apps
+icons.files += wordflow.png
+INSTALLS += target desktop icons

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=WordFlow
+Comment=Flash card vocabulary learning application. 
+Exec=wordflow -style Material
+Icon=wordflow
+Terminal=false
+Categories=Science;Qt;
