@@ -2,6 +2,7 @@
 [![Build Status](https://travis-ci.org/damaxi/wordflow.svg?branch=master)](https://travis-ci.org/damaxi/wordflow)
 
 A new vocabulary application.
+
 ![Preview](https://raw.githubusercontent.com/damaxi/wordflow/master/screenshot.gif)
 
 ## Why create another application?
