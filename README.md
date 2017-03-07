@@ -3,7 +3,9 @@
 
 A new vocabulary application.
 
-![Preview](https://raw.githubusercontent.com/damaxi/wordflow/master/screenshot.gif)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/damaxi/wordflow/master/screenshot.gif" alt="WordFlow presentation"/>
+</p>
 
 ## Why create another application?
 
