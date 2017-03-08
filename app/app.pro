@@ -33,9 +33,20 @@ HEADERS += \
 
 TARGET = wordflow
 
-target.path = /usr/local/bin
-desktop.path = /usr/share/applications
-desktop.files += wordflow.desktop
-icons.path = /usr/share/icons/hicolor/48x48/apps
-icons.files += wordflow.png
-INSTALLS += target desktop icons
+unix:!macx: {
+    target.path = /usr/local/bin
+    desktop.path = /usr/share/applications
+    desktop.files += dist/wordflow.desktop
+    icons.path = /usr/share/icons/hicolor/48x48/apps
+    icons.files += dist/wordflow.png
+
+    INSTALLS += target desktop icons
+}
+
+win32: {
+    RC_ICONS = dist/wordflow.ico
+}
+
+macx: {
+    ICON = dist/wordflow.icns
+}

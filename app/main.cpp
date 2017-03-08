@@ -85,10 +85,10 @@ int main(int argc, char *argv[])
 
         QSystemTrayIcon *trayIcon = new QSystemTrayIcon(root);
         trayIcon->setContextMenu(trayIconMenu);
-        trayIcon->setIcon(QIcon(":/images/dictionary.png"));
+        trayIcon->setIcon(QIcon(":/images/wordflow.png"));
         trayIcon->show();
 
-        qmlWindow->setIcon(QIcon(":/images/dictionary.png"));
+        qmlWindow->setIcon(QIcon(":/images/wordflow@4x.png"));
     }
 
 
