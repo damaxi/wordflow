@@ -7,7 +7,7 @@
 QT       += sql charts
 QT       -= gui
 
-TARGET = lib
+TARGET = wordflow
 TEMPLATE = lib
 CONFIG += staticlib c++11
 
