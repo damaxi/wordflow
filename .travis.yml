@@ -29,8 +29,8 @@ script:
   - cd ..
   - wget -c https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage
   - chmod a+x linuxdeployqt*.AppImage
-  - ./linuxdeployqt*.AppImage ./appdir/usr/bin/* -bundle-non-qt-libs -qmldir=./app
-  - ./linuxdeployqt*.AppImage ./appdir/usr/bin/* -appimage
+  - ./linuxdeployqt*.AppImage ./AppDir/usr/bin/* -bundle-non-qt-libs -qmldir=./app
+  - ./linuxdeployqt*.AppImage ./AppDir/usr/bin/* -appimage
   - curl --upload-file ./WordFlow*.AppImage https://transfer.sh/WordFlow-git.$(git rev-parse --short HEAD)-x86_64.AppImage 
 
 notifications:
