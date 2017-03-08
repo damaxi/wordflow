@@ -23,14 +23,14 @@ script:
   - sudo checkinstall --pkgname=app --pkgversion="1" --pkgrelease="1" --backup=no --fstrans=no --default --deldoc 
   - mkdir -p AppDir/usr/bin ; cd AppDir
   - dpkg -x ../app_1-1_amd64.deb . ; find .
-  - mv ./usr/local/bin* ./usr/bin
+  - mv ./usr/local/bin/* ./usr/bin/
   - cp ./usr/share/icons/hicolor/48x48/apps/wordflow.png .
   - cp ./usr/share/applications/wordflow.desktop .
   - cd ..
   - wget -c https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage
   - chmod a+x linuxdeployqt*.AppImage
-  - ./linuxdeployqt*.AppImage ./AppDir/usr/bin/wordflow -bundle-non-qt-libs -qmldir=./app
-  - ./linuxdeployqt*.AppImage ./AppDir/usr/bin/wordflow -appimage
+  - ./linuxdeployqt*.AppImage ./AppDir/usr/bin/* -bundle-non-qt-libs -qmldir=./app
+  - ./linuxdeployqt*.AppImage ./AppDir/usr/bin/* -appimage
   - curl --upload-file ./WordFlow*.AppImage https://transfer.sh/WordFlow-git.$(git rev-parse --short HEAD)-x86_64.AppImage 
 
 notifications:
