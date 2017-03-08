@@ -12,34 +12,34 @@ TEMPLATE = lib
 CONFIG += staticlib c++11
 
 SOURCES += database.cpp \
-    sqlerror.cpp \
-    sqlwordsmodel.cpp \
-    sqlvocabularyquerymodel.cpp \
-    sqlwordseditmodel.cpp \
-    sqllearningwordsmodel.cpp \
-    sqlvocabularyeditmodel.cpp \
-    sqlvocabularymodel.cpp \
-    localemodel.cpp \
-    statisticchartmodel.cpp \
-    datehelper.cpp \
-    sqlstatisticmodel.cpp \
-    sqltotalwordsstatisticmodel.cpp \
-    sqlstatisticscommon.cpp
+    helpers/datehelper.cpp \
+    model/localemodel.cpp \
+    sqlmodel/sqlerror.cpp \
+    sqlmodel/sqllearningwordsmodel.cpp \
+    sqlmodel/sqlstatisticmodel.cpp \
+    sqlmodel/sqlstatisticscommon.cpp \
+    sqlmodel/sqltotalwordsstatisticmodel.cpp \
+    sqlmodel/sqlvocabularyeditmodel.cpp \
+    sqlmodel/sqlvocabularymodel.cpp \
+    sqlmodel/sqlvocabularyquerymodel.cpp \
+    sqlmodel/sqlwordseditmodel.cpp \
+    sqlmodel/sqlwordsmodel.cpp \
+    model/statisticchartmodel.cpp
 
 HEADERS += database.h \
-    sqlerror.h \
-    sqlwordsmodel.h \
-    sqlvocabularyquerymodel.h \
-    sqlwordseditmodel.h \
-    sqllearningwordsmodel.h \
-    sqlvocabularyeditmodel.h \
-    sqlvocabularymodel.h \
-    localemodel.h \
-    statisticchartmodel.h \
-    datehelper.h \
-    sqlstatisticmodel.h \
-    sqltotalwordsstatisticmodel.h \
-    sqlstatisticscommon.h
+    helpers/datehelper.h \
+    model/localemodel.h \
+    sqlmodel/sqlerror.h \
+    sqlmodel/sqllearningwordsmodel.h \
+    sqlmodel/sqlstatisticmodel.h \
+    sqlmodel/sqlstatisticscommon.h \
+    sqlmodel/sqltotalwordsstatisticmodel.h \
+    sqlmodel/sqlvocabularyeditmodel.h \
+    sqlmodel/sqlvocabularymodel.h \
+    sqlmodel/sqlvocabularyquerymodel.h \
+    sqlmodel/sqlwordseditmodel.h \
+    sqlmodel/sqlwordsmodel.h \
+    model/statisticchartmodel.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

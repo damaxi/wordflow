@@ -3,9 +3,9 @@
 
 #include <QObject>
 #include <QtCharts/QLineSeries>
-#include "sqlstatisticmodel.h"
-#include "sqltotalwordsstatisticmodel.h"
-#include "datehelper.h"
+#include "../sqlmodel/sqlstatisticmodel.h"
+#include "../sqlmodel/sqltotalwordsstatisticmodel.h"
+#include "../helpers/datehelper.h"
 
 QT_CHARTS_USE_NAMESPACE
 

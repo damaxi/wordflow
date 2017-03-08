@@ -12,13 +12,13 @@
 #include <QMenu>
 #include <QQuickWindow>
 #include "vocabularypresenter.h"
-#include "sqlwordseditmodel.h"
-#include "sqlvocabularyquerymodel.h"
-#include "sqllearningwordsmodel.h"
-#include "sqlvocabularyeditmodel.h"
-#include "statisticchartmodel.h"
-#include "localemodel.h"
-#include "datehelper.h"
+#include "sqlmodel/sqlwordseditmodel.h"
+#include "sqlmodel/sqlvocabularyquerymodel.h"
+#include "sqlmodel/sqllearningwordsmodel.h"
+#include "sqlmodel/sqlvocabularyeditmodel.h"
+#include "model/statisticchartmodel.h"
+#include "model/localemodel.h"
+#include "helpers/datehelper.h"
 
 #include <QSqlRecord>
 

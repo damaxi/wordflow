@@ -5,7 +5,7 @@
 #include <QDebug>
 #include <QStandardPaths>
 #include <QCoreApplication>
-#include "sqlerror.h"
+#include "sqlmodel/sqlerror.h"
 
 Database::Database(QObject *parent)
     :
