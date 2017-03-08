@@ -12,14 +12,18 @@ install:
   - sudo apt-get install qt58charts-no-lgpl 
   - sudo apt-get install qt58quickcontrols2 
   - sudo apt-get install qt58location 
-  - sudo apt-get install qt58declarative 
+  - sudo apt-get install qt58declarative
+  - sudo apt-get install checkinstall 
   - source /opt/qt58/bin/qt58-env.sh
 
 script:
-  - mkdir build
-  - cd build
-  - qmake .. && make
+  - qmake PREFIX=/usr 
+  - make
   - ./tests/unittest
+  - sudo checkinstall --pkgname=app --pkgversion="1" --pkgrelease="1" --backup=no --fstrans=no --default --deldoc 
+  - mkdir -p AppDir/usr/bin ; cd AppDir
+  - dpkg -x ../app_1-1_amd64.deb . ; find .
+  - mv ./usr/local/bin* ./usr/bin
 
 notifications:
   email: false
