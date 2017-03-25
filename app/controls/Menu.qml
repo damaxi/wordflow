@@ -98,5 +98,22 @@ Pane {
                 showSubMenu("qrc:/screens/StatisticScreen.qml")
             }
         }
+
+        Loader {
+            id: translate
+            anchors.top: addNewVocabulary.bottom
+            Layout.fillWidth: true
+            sourceComponent: menuButton
+            onLoaded: {
+                item.text = qsTr("Translate word")
+            }
+        }
+
+        Connections {
+            target: translate.item
+            onClicked: {
+                showSubMenu("qrc:/screens/TranslateScreen.qml")
+            }
+        }
     }
 }

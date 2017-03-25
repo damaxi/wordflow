@@ -20,5 +20,6 @@
         <file>images/wordflow@3x.png</file>
         <file>images/wordflow@2x.png</file>
         <file>images/wordflow.png</file>
+        <file>screens/TranslateScreen.qml</file>
     </qresource>
 </RCC>

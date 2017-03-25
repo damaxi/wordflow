@@ -14,7 +14,6 @@ CONFIG += staticlib c++11
 SOURCES += database.cpp \
     helpers/datehelper.cpp \
     model/localemodel.cpp \
-    sqlmodel/sqlerror.cpp \
     sqlmodel/sqllearningwordsmodel.cpp \
     sqlmodel/sqlstatisticmodel.cpp \
     sqlmodel/sqlstatisticscommon.cpp \
@@ -29,7 +28,6 @@ SOURCES += database.cpp \
 HEADERS += database.h \
     helpers/datehelper.h \
     model/localemodel.h \
-    sqlmodel/sqlerror.h \
     sqlmodel/sqllearningwordsmodel.h \
     sqlmodel/sqlstatisticmodel.h \
     sqlmodel/sqlstatisticscommon.h \

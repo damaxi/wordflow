@@ -41,6 +41,8 @@ ApplicationWindow {
     Settings {
         id: settings
         property int defaultVocabularyRow: 1
+        property int sourceLangTranslator: 0
+        property int destinationLangTranslator: 0
     }
 
     header: ToolBar {
