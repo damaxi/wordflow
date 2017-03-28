@@ -7,7 +7,7 @@ SOURCES += main.cpp \
     vocabularypresenter.cpp
 
 unit:!macx: {
-    SOURCES += linuxkeyboardhandler.cpp
+    #SOURCES += linuxkeyboardhandler.cpp
 }
 
 macx: {
