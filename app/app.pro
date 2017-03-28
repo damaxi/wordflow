@@ -3,8 +3,6 @@ QT += qml quickcontrols2 sql charts quick
 CONFIG += c++11
 #CONFIG-=app_bundle
 
-LIBS += -framework AppKit
-
 SOURCES += main.cpp \
     vocabularypresenter.cpp
 
@@ -13,6 +11,7 @@ unit:!macx: {
 }
 
 macx: {
+    LIBS += -framework AppKit
     OBJECTIVE_SOURCES += osxkeyboardhandler.mm
 }
 
