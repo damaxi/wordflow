@@ -3,8 +3,18 @@ QT += qml quickcontrols2 sql charts quick
 CONFIG += c++11
 #CONFIG-=app_bundle
 
+LIBS += -framework AppKit
+
 SOURCES += main.cpp \
     vocabularypresenter.cpp
+
+unit:!macx: {
+    SOURCES += linuxkeyboardhandler.cpp
+}
+
+macx: {
+    OBJECTIVE_SOURCES += osxkeyboardhandler.mm
+}
 
 RESOURCES += qml.qrc
 
@@ -30,7 +40,8 @@ else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/
 else:unix: PRE_TARGETDEPS += $$OUT_PWD/../lib/libwordflow.a
 
 HEADERS += \
-    vocabularypresenter.h
+    vocabularypresenter.h \
+    nativekeyboardhandler.h
 
 TARGET = wordflow
 

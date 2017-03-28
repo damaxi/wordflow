@@ -1,6 +1,7 @@
 #include "helpers/datehelper.h"
 #include "model/localemodel.h"
 #include "model/statisticchartmodel.h"
+#include "nativekeyboardhandler.h"
 #include "sqlmodel/sqllearningwordsmodel.h"
 #include "sqlmodel/sqlvocabularyeditmodel.h"
 #include "sqlmodel/sqlvocabularyquerymodel.h"
@@ -31,6 +32,9 @@ int main(int argc, char *argv[]) {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
   QApplication app(argc, argv);
+
+  NativeKeyboardHandler handler;
+  app.installNativeEventFilter(&handler);
 
   if (!QSystemTrayIcon::isSystemTrayAvailable()) {
     QMessageBox::critical(0, QObject::tr("Systray"),
