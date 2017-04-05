@@ -33,8 +33,8 @@ int main(int argc, char *argv[]) {
 
   QApplication app(argc, argv);
 
-  NativeKeyboardHandler handler;
-  app.installNativeEventFilter(&handler);
+  //  NativeKeyboardHandler handler;
+  //  app.installNativeEventFilter(&handler);
 
   if (!QSystemTrayIcon::isSystemTrayAvailable()) {
     QMessageBox::critical(0, QObject::tr("Systray"),
