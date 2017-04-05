@@ -10,12 +10,10 @@ bool NativeKeyboardHandler::nativeEventFilter(const QByteArray &eventType,
   if (eventType == "mac_generic_NSEvent") {
     NSEvent *event = static_cast<NSEvent *>(message);
     if ([event type] == NSKeyDown) {
-      // Handle key event
-      //      NSInteger currentChangeCount = [pasteboard changeCount];
-      //      if (currentChangeCount == lastChangeCount)
-      //        return;
-      //      NSLog(@"Pasteboard changed: %@", [pasteboard types]);
+      NSPasteboard *myPasteboard = [NSPasteboard generalPasteboard];
+      NSString *myString = [myPasteboard stringForType:NSPasteboardTypeString];
       qDebug() << QString::fromNSString([event characters]);
+      qDebug() << QString::fromNSString(myString);
     }
   }
   return false;

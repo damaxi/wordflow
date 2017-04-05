@@ -101,7 +101,7 @@ Pane {
 
         Loader {
             id: translate
-            anchors.top: addNewVocabulary.bottom
+            anchors.top: statistics.bottom
             Layout.fillWidth: true
             sourceComponent: menuButton
             onLoaded: {
